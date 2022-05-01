@@ -25,6 +25,7 @@ const QuestionPreiew:React.FC<props> = ({setModal, question}) => {
       setModal(undefined)
    }, [setModal])
 
+   console.log(question)
    return(
       <BodyBG onClick={(event: any) => thisDeleateModal(event)}>
          <Body>
@@ -47,8 +48,9 @@ const QuestionPreiew:React.FC<props> = ({setModal, question}) => {
                src={question.img} 
                alt=""
             />
+
             <TextInfo>The number of words broken down by letters: {question.wordbroken}</TextInfo>
-            <TextInfo>Prize: ETH {question.prize}</TextInfo> {/* с учетом коммисии */}
+            <TextInfo>Prize: ETH {question.prize - (0.05 * question.prize)}</TextInfo>
             <TextInfo>The cost of the attempt: ETH {question.attempt_price}</TextInfo>
 
             <Next onClick={(event: any) => thisDeleateModal(event)} >Ok</Next>

@@ -9,6 +9,7 @@ export const ErrorModalUI = styled.div`
    height: 20%;
    background-color: #fff;
    border-radius:30px;
+   margin:0 auto;
 `
 
 const Header = styled.div`

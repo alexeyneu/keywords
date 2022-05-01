@@ -11,7 +11,7 @@ import {
 
 import {Formik} from 'formik'
 import * as yup from 'yup';
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { 
    useMoralisFile, 
    useNewMoralisObject, 
@@ -23,14 +23,18 @@ import {wordValid} from '../../../shared/variable'
 import {useSafeMint} from '../../../hooks/mint'
 import {useImageFee} from '../../../hooks/imageFee'
 import QuestionPreiew from "../../shared/modals/questionPreview/questionPreview";
+import lock from '../../../assets/img/lock.svg'
+import { useAppDispatch } from "../../../store/hooks"
+import { setSuccess } from "../../../store/sliced/success/success.slice"
 
 const CreateQuestionsComp = () => {
+   const dispatch = useAppDispatch();
    const [status, setStatus] = useState<string>('')
    const [question, setQuestion] = useState<undefined | any>(undefined)
    const [img, setImg] = useState<string>('')
 
    const {saveFile} = useMoralisFile();
-   const {Moralis,} = useMoralis();
+   const {Moralis, chainId, isWeb3Enabled} = useMoralis();
    const { save } = useNewMoralisObject("questions");
    const mint = useSafeMint()
    const imageFee = useImageFee()
@@ -88,9 +92,9 @@ const CreateQuestionsComp = () => {
    
          return Wordbroken.slice(0, -1)
       }
-
+      
       let questions = {
-         id:1, // objLast + 1
+         id: objLast._objCount + 1,
          wordbroken:Wordbroken(),
          attempt:0,
          attempt_price:Number(Moralis.Units.ETH(Number(values.Attempt_price))),
@@ -115,11 +119,13 @@ const CreateQuestionsComp = () => {
       const isMint = await mint(questionsMint, JSON.stringify(meta))
 
       if(isMint) {
+         console.log(questions)
          await save(
             questions,
             {
                onSuccess:(result:any) => {
                   console.log(result)
+                  dispatch(setSuccess("You have created a word!"));
                }, 
                onError:(error:any) => {
                   console.log(error)
@@ -150,7 +156,7 @@ const CreateQuestionsComp = () => {
       }
       
       let questions = {
-         id:1, // objLast + 1
+         id: objLast._objCount + 1,
          wordbroken:Wordbroken(),
          attempt:0,
          attempt_price:Number(values.Attempt_price),
@@ -159,7 +165,6 @@ const CreateQuestionsComp = () => {
          img: img,
       }
 
-      console.log(questions)
       setQuestion(questions)
    }
 
@@ -180,8 +185,10 @@ const CreateQuestionsComp = () => {
                }}
                validationSchema={valid}
                onSubmit={(values) => {
-                  status === '' && submit(values.Word)
-                  status === 'Image generation The picture has been generated!' && createQuestions(values)
+                  if(chainId === '0x4' && isWeb3Enabled) {
+                     status === '' && submit(values.Word)
+                     status === 'Image generation The picture has been generated!' && createQuestions(values)
+                  }
                }}
             >
                {({ errors, touched, values, }) => (
@@ -233,9 +240,21 @@ const CreateQuestionsComp = () => {
                            >Question preview</Submit>
                         </>
                      }
-
-                     {status === "" &&
-                        <Submit>Next</Submit>
+                     
+                     
+                     {status === "" ?
+                        chainId === '0x4' && isWeb3Enabled ?
+                           <Submit>ok</Submit>
+                           :
+                           <Submit>
+                              <img 
+                              width="25px"
+                              src={lock}
+                              alt=""
+                              />
+                           </Submit>
+                        :
+                        ""
                      }
                   </BodyForm>
                )}

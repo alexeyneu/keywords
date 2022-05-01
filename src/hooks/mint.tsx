@@ -8,7 +8,6 @@ import {address} from '../shared/variable'
 import abi from '../shared/lib/abi.json'
 import { useAppDispatch } from "../store/hooks"
 import { setError } from "../store/sliced/error/error.sliced"
-import { setSuccess } from "../store/sliced/success/success.slice"
 
 export const useSafeMint = () => {
    const dispatch = useAppDispatch();
@@ -36,15 +35,12 @@ export const useSafeMint = () => {
       
             const isMint = await fetch({
                params: options,
-               onSuccess: (tx:any) => tx.wait().then((newTx:any) => {
-                  dispatch(setSuccess("You have created a word!"));
-               }),
 
                onError: (error:any) => {
                   console.log(error);
                   switch(error.code) {
-                     case "UNPREDICTABLE_GAS_LIMIT":
-                        dispatch(setError("there is not enough Ethereum for gas"));
+                     default:
+                        dispatch(setError("There is not enough ETH in your account"));
                   }
                },
             })  
