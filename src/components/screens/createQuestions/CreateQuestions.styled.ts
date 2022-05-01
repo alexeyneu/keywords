@@ -50,8 +50,8 @@ export const Input = styled(Field)`
 `
 
 export const Submit = styled.button`
-   width: 30%;
-   height: 45px;
+   width: 10em;
+   height: 2em;
 
    margin:20px 0;
 

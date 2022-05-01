@@ -6,7 +6,7 @@ import {
 
 import { useMoralis } from "react-moralis";
 import {useAppDispatch} from '../../../../store/hooks';
-import {setUser} from '../../../../store/user/user.sliced'
+import {setUser} from '../../../../store/sliced/user/user.sliced'
 import { useEffect } from "react";
 
 export const ConnectComp = () => {

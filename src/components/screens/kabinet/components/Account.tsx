@@ -8,7 +8,6 @@ import {useAppSelector} from '../../../../store/hooks';
 
 export const AccountComp = () => {
    const user = useAppSelector(state => state.user);
-   console.log(user)
 
    return(
       <BodyAccount>

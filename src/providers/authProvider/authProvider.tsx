@@ -1,7 +1,7 @@
 import { useMoralis } from "react-moralis";
 import { useEffect } from "react";
 import {useAppDispatch} from '../../store/hooks';
-import {setUser} from '../../store/user/user.sliced'
+import {setUser} from '../../store/sliced/user/user.sliced'
 
 interface props {
    children:React.ReactNode;
