@@ -15,11 +15,8 @@ import {
 
 import {Formik} from 'formik'
 import * as yup from 'yup';
-import { useCallback, useMemo } from "react"
-import { useAppDispatch } from "../../../../store/hooks"
-import { setError } from "../../../../store/sliced/error/error.sliced"
+import { useCallback, useMemo, useRef } from "react"
 import {wordValid} from '../../../../shared/variable'
-import {deleateModal} from '../../../../shared/logic/deleateModal'
 import {useMoralis} from 'react-moralis'
 import lock from '../../../../assets/img/lock.svg'
 import {useGuess} from '../../../../hooks/guess'
@@ -30,7 +27,6 @@ interface props{
 }
 
 export const Guessed = ({setModal, question}: props) => {
-   const dispatch = useAppDispatch();
    const {chainId, isWeb3Enabled} = useMoralis()
    const guess = useGuess()
 
@@ -40,17 +36,34 @@ export const Guessed = ({setModal, question}: props) => {
       })
    }, [])
 
-   const DeleateGuessed = useCallback((event:any) => {
-      deleateModal(event, setModal, ["sc-fLlhyt sc-llJcti jReeqr gCnfIC", "sc-iIPllB jqsUId deleate"])
-   }, [setModal])
+   const deleateBg = useRef<HTMLDivElement>(null);
+   const deleate = useRef<HTMLButtonElement>(null);
+
+   const thisDeleateModal = useCallback((event:any) => {
+      if(
+         deleateBg.current !== null &&
+         deleate.current !== null 
+      ) {
+
+         (event.target.className === deleate.current.className ||
+         event.target.className === deleateBg.current.className) &&
+         setModal &&
+         setModal(undefined)
+      }
+
+   }, [setModal, deleate, deleateBg])
 
    return(
-      <GuessedBg onClick={(event: any) => DeleateGuessed(event)}>
+      <GuessedBg 
+         onClick={(event: any) => thisDeleateModal(event)}
+         ref={deleateBg}
+      >
          <GuessedModal>
             <HeaderGuessed>
                <DeleateModalBody>
                   <DeleateModal 
                      className="deleate"
+                     ref={deleate}
                   />
                </DeleateModalBody>
             </HeaderGuessed>
@@ -60,10 +73,7 @@ export const Guessed = ({setModal, question}: props) => {
                }}
                validationSchema={valid}
                onSubmit={(values) => {
-                  chainId === '0x4' && isWeb3Enabled &&
-                  console.log(5, question.attempt_price, values.Word) 
-                  guess('5', question.attempt_price, values.Word)
-                  // dispatch(setError("You didn't guess"))
+                  !question.guessed && guess(String(Number(question.id) - 2), question.attempt_price, question.prize, values.Word)
                }}
             >
                {({ errors, touched, values, }) => (
@@ -80,7 +90,9 @@ export const Guessed = ({setModal, question}: props) => {
                      {errors.Word && touched.Word && <Error>{errors.Word}</Error>}
 
                      <Next type="submit">
-                        {chainId === '0x4' && isWeb3Enabled ?
+                        {
+                        chainId === '0x4' &&
+                        isWeb3Enabled ?
                            'ok'
                            :
                            <img 

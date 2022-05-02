@@ -1,9 +1,9 @@
 
 
 import { Route, Routes} from "react-router-dom";
-import Kabinet from "../../pages/Kabinet/Kabinet";
 import CreateQuestions from "../../pages/CreateQuestions/CreateQuestions";
 import Main from "../../pages/main/main";
+import {Question} from "../../components/screens/question/Question";
 
 export const Router = () => {
    return (
@@ -11,12 +11,12 @@ export const Router = () => {
          <Route 
             path="/"
             element={<Main />}  
-         /> 
+         />
 
          <Route 
-            path="/kabinet"
-            element={<Kabinet />}  
-         /> 
+            path="/question"
+            element={<Question />}  
+         />
 
          <Route 
             path="/createQuestions"

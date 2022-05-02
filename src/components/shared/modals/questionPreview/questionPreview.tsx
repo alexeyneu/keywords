@@ -13,25 +13,39 @@ import {
 } from '../../UI/Modals'
 
 import {props} from '../question/question.type'
-import { useCallback, } from "react"
+import { useCallback, useRef } from "react"
+
 
 const QuestionPreiew:React.FC<props> = ({setModal, question}) => {
-
+   const deleateBg = useRef<HTMLDivElement>(null);
+   const deleate = useRef<HTMLButtonElement>(null);
+   const deleateOk = useRef<HTMLButtonElement>(null);
+   
    const thisDeleateModal = useCallback((event:any) => {
-      console.log(event.target.className);
+      if(
+         deleateBg.current !== null &&
+         deleateOk.current !== null &&
+         deleate.current !== null 
+      ) {
 
-      (event.target.className === "sc-bjUoiL gZNbSN" ||
-      event.target.className === "sc-hHLeRK bmAAez deleate") &&
-      setModal(undefined)
-   }, [setModal])
+         (event.target.className === deleate.current.className ||
+         event.target.className === deleateOk.current.className ||
+         event.target.className === deleateBg.current.className) &&
+         setModal &&
+         setModal(undefined)
+      }
 
-   console.log(question)
+   }, [setModal, deleate, deleateBg])
    return(
-      <BodyBG onClick={(event: any) => thisDeleateModal(event)}>
+      <BodyBG 
+         ref={deleateBg}
+         onClick={(event: any) => thisDeleateModal(event)}
+      >
          <Body>
             <Header>
                <DeleateModalBody>
                   <DeleateModal 
+                     ref={deleate}
                      className="deleate"
                   />
                </DeleateModalBody>
@@ -42,7 +56,7 @@ const QuestionPreiew:React.FC<props> = ({setModal, question}) => {
                  ` ${new Date(question.date).getFullYear()}.${new Date(question.date).getMonth()}.${new Date(question.date).getDate()}`
                }
             </TextInfo>
-            <TextInfo>Id: {question.id}</TextInfo>
+            <TextInfo>Id: {question.ID}</TextInfo>
             <TextInfo>How many attempts: {question.attempt}</TextInfo>
             <Img
                src={question.img} 
@@ -53,7 +67,9 @@ const QuestionPreiew:React.FC<props> = ({setModal, question}) => {
             <TextInfo>Prize: ETH {question.prize - (0.05 * question.prize)}</TextInfo>
             <TextInfo>The cost of the attempt: ETH {question.attempt_price}</TextInfo>
 
-            <Next onClick={(event: any) => thisDeleateModal(event)} >Ok</Next>
+            <Next 
+               ref={deleateOk}
+            >Ok</Next>
          </Body>
       </BodyBG>
    )

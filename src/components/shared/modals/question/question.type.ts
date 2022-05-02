@@ -1,6 +1,6 @@
 export interface props{
-   setModal:React.Dispatch<any>;
-   question:question;
+   setModal?:React.Dispatch<any>;
+   question:question | any;
 }
 
 export interface question{

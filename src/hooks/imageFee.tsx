@@ -1,15 +1,11 @@
-import { 
-   useWeb3ExecuteFunction,
+import {
    useMoralis,
 } from "react-moralis";
 
 import {addressCreator} from '../shared/variable'
-import { useAppDispatch } from "../store/hooks"
 import { useWeb3Transfer } from "react-moralis"
-import { setError } from "../store/sliced/error/error.sliced"
 
 export const useImageFee = () => {
-   const dispatch = useAppDispatch();
    const {Moralis} = useMoralis()
    const { fetch } = useWeb3Transfer({
       type: "native",

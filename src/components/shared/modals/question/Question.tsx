@@ -13,19 +13,20 @@ import {
 } from '../../UI/Modals'
 
 import {props} from './question.type'
-import { useCallback, useState } from "react"
-import {deleateModal} from '../../../../shared/logic/deleateModal'
+import { useState } from "react"
+import { useMoralis } from "react-moralis"
 import { Guessed } from "../guessed/Guessed"
+import {useNavigate} from 'react-router-dom';
+import lock from '../../../../assets/img/lock.svg'
 
-const QuestionComp:React.FC<props> = ({setModal, question}) => {
+const QuestionComp:React.FC<props> = ({question}) => {
    const [guessedModal, setGuessedModal] = useState<boolean>(false);
-
-   const thisDeleateModal = useCallback((event:any) => {
-      deleateModal(event, setModal, ["sc-idiyUo bgfDtg", "sc-hHLeRK bmAAez deleate"])
-   }, [setModal])
-
+   const {Moralis, isAuthenticated} = useMoralis()
+   const navigate = useNavigate()
+   console.log(isAuthenticated)
+   
    return(
-      <BodyBG onClick={(event: any) => thisDeleateModal(event)}>
+      <BodyBG >
          {guessedModal &&
             <Guessed 
                setModal={setGuessedModal}
@@ -35,7 +36,7 @@ const QuestionComp:React.FC<props> = ({setModal, question}) => {
 
          <Body>
             <Header>
-               <DeleateModalBody>
+               <DeleateModalBody onClick={() => {navigate('/')}}>
                   <DeleateModal 
                      className="deleate"
                   />
@@ -47,7 +48,7 @@ const QuestionComp:React.FC<props> = ({setModal, question}) => {
                  ` ${new Date(question.date).getFullYear()}.${new Date(question.date).getMonth()}.${new Date(question.date).getDate()}`
                }
             </TextInfo>
-            <TextInfo>Id: {question.id}</TextInfo>
+            <TextInfo>Question №: {question.ID}</TextInfo>
             <TextInfo>How many attempts: {question.attempt}</TextInfo>
             <Img
                src={question.img} 
@@ -55,9 +56,19 @@ const QuestionComp:React.FC<props> = ({setModal, question}) => {
             />
             <TextInfo>The number of words broken down by letters: {question.wordbroken}</TextInfo>
             <TextInfo>Prize: ETH {question.prize}</TextInfo>
-            <TextInfo>The cost of the attempt: ETH {question.attempt_price}</TextInfo>
-
-            <Next onClick={() => setGuessedModal(true)}>Try to guess</Next>
+            <TextInfo>The cost of the attempt: ETH {Moralis.Units.FromWei(question.attempt_price)}</TextInfo>
+            
+            <Next onClick={() => setGuessedModal(true)}>
+               {!question.guessed ? 
+                  'Try to guess'
+                  :
+                  <img 
+                     width="25px"
+                     src={lock}
+                     alt=""
+                  />
+               }
+            </Next>
          </Body>
       </BodyBG>
    )

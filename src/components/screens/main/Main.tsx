@@ -7,9 +7,9 @@ import {
    BodyFilter,
    Filtertext,
 } from "./Main.styled"
-import QuestionComp from '../../shared/modals/question/Question';
 
 import {useState, useEffect, useCallback} from 'react'
+import {useNavigate} from 'react-router-dom';
 import { 
    useMoralis,
 } from "react-moralis";
@@ -28,7 +28,7 @@ const MainComp = () => {
    const [pages, setPages] = useState<number>(0)
    const [allPages, setAllPages] = useState<number>(0);
    const [question, setQuestion] = useState<any>(null)
-   const [questionIndex, setQuestionIndex] = useState<number | false>(false)
+   const navigate = useNavigate()
    const [filter, setFilter] = useState<filter>({
       guessed:false,
       date:false,
@@ -37,28 +37,27 @@ const MainComp = () => {
       my:false,
    })
    
-   const setModal = useCallback((index: number) => () => {
-      setQuestionIndex(index)
-   }, [questionIndex])
+   const navigateQuestion = useCallback((index: number) => () => {
+      navigate('/question', {
+         state: {
+            ...question[index].attributes,
+            id: question[index]._objCount,
+         }
+      })
+   }, [question])
 
    useEffect(() => {
       async function getQuestions () {
          const Questions = Moralis.Object.extend("questions");
          const query = new Moralis.Query(Questions);
-
-         filter.prize && query.ascending("prize")
-
+         filter.prize && query.descending("prize")
          filter.date && query.ascending("date")
-
          filter.attempts && query.descending("attempt")
-
-         filter.guessed && query.equalTo("guessed", true)
-
+         query.equalTo("guessed", filter.guessed)
          filter.my && query.equalTo("user", Moralis.User.current())
+
          const objAll = await query
          .find();
-         
-         // console.log(objAll)
 
          setAllPages(objAll.length)
 
@@ -86,15 +85,6 @@ const MainComp = () => {
 
    return(
       <Container>
-         {typeof questionIndex === 'number' && 
-            <QuestionComp 
-               setModal={setQuestionIndex}
-               question={{
-                  ...question[questionIndex].attributes,
-                  id:question[questionIndex].objCount
-               }}
-            />
-         }
 
          <ContainerQuestions>
             <BodyFilter>
@@ -143,21 +133,23 @@ const MainComp = () => {
                question.map((question:any, index:number) => {
                   return(
                      <div key={question.date}>
-                        <Questions onClick={setModal(index)}>
+                        <Questions onClick={navigateQuestion(index)}>
                            <QuestionsBlock>
-                              <QuestionsTitle>Prize: {question.attributes.prize}</QuestionsTitle>
-                              <QuestionsTitle>Attempt price: {question.attributes.attempt_price}</QuestionsTitle>
+                              <QuestionsTitle>Question №: {Number(question.attributes.ID)}</QuestionsTitle>
+                              <QuestionsTitle>Image URL: {question.attributes.img} </QuestionsTitle>
                            </QuestionsBlock>
 
                            <QuestionsBlock>
-                              <QuestionsTitle>Time Create: {question.attributes.date}</QuestionsTitle>
-                              <QuestionsTitle>Attempts: {question.attributes.attempt}</QuestionsTitle>
-                              {/* <QuestionsTitle>Creator: {
-                                 question.attributes
-                                 .user.attributes
-                                 .ethAddress.toString()
-                                 .replace(/.+/, (e: any) => e.slice(0,3)+'*'.repeat(e.slice(3,-3).length)+e.slice(-3))}
-                              </QuestionsTitle> */}
+                              <QuestionsTitle>Number of words: {question.attributes.wordbroken}</QuestionsTitle>
+                              <QuestionsTitle>Attempts made: {question.attributes.attempt}</QuestionsTitle>
+                              <QuestionsTitle>Date create: 
+                                 {
+                                 `  ${new Date(question.updatedAt).getFullYear()}.
+                                    ${new Date(question.updatedAt).getMonth()}.
+                                    ${new Date(question.updatedAt).getDate()}
+                                 `
+                                 }
+                              </QuestionsTitle>
                            </QuestionsBlock>
                         </Questions>
                      </div>

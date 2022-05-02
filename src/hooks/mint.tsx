@@ -15,7 +15,7 @@ export const useSafeMint = () => {
    const {Moralis, authenticate, account, chainId} = useMoralis()
    const {switchNetwork} = useChain()
 
-   const mint = async (questions:any, meta:string) => {
+   const mint = async (questions:any, meta:string, setStatus: React.Dispatch<React.SetStateAction<string>>) => {
       if(account) {
          if(chainId === '0x4') {
             const ethers = Moralis.web3Library;
@@ -27,7 +27,7 @@ export const useSafeMint = () => {
                params: {
                   wordHash:ethers.utils.id(questions.word),
                   uri:JSON.stringify(meta),
-                  tryValue: String(questions.attempt_price)
+                  tryValue: questions.attempt_price
                },
 
                msgValue: Moralis.Units.ETH(questions.prize),
@@ -42,6 +42,8 @@ export const useSafeMint = () => {
                      default:
                         dispatch(setError("There is not enough ETH in your account"));
                   }
+
+                  setStatus('Image generation The picture has been generated!')
                },
             })  
 

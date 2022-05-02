@@ -72,6 +72,7 @@ const CreateQuestionsComp = () => {
          setStatus('Image generation The picture has been generated!');
       }
    }
+   
 
    const createQuestions = async (values:valueSubmit) => {
       setStatus('Creating a question');
@@ -94,10 +95,11 @@ const CreateQuestionsComp = () => {
       }
       
       let questions = {
-         id: objLast._objCount + 1,
+         ID: String(Number(objLast.attributes.ID) + 1),
+         guessed:false,
          wordbroken:Wordbroken(),
          attempt:0,
-         attempt_price:Number(Moralis.Units.ETH(Number(values.Attempt_price))),
+         attempt_price:String(Moralis.Units.ETH(values.Attempt_price)),
          prize:Number(values.Prize),
          date:Date.now(),
          img: img,
@@ -105,7 +107,7 @@ const CreateQuestionsComp = () => {
       }
 
       const meta = {
-         "name":`MindBreaker.Games question #${questions.id}`,
+         "name":`MindBreaker.Games question #${questions.ID}`,
          "description":"What is shown in the picture?",
          "image":questions.img
       }
@@ -116,10 +118,9 @@ const CreateQuestionsComp = () => {
          prize: questions.prize,
       }
 
-      const isMint = await mint(questionsMint, JSON.stringify(meta))
+      const isMint = await mint(questionsMint, JSON.stringify(meta), setStatus)
 
       if(isMint) {
-         console.log(questions)
          await save(
             questions,
             {
@@ -154,9 +155,8 @@ const CreateQuestionsComp = () => {
    
          return Wordbroken.slice(0, -1)
       }
-      
       let questions = {
-         id: objLast._objCount + 1,
+         ID:String(Number(objLast.attributes.ID) + 1), 
          wordbroken:Wordbroken(),
          attempt:0,
          attempt_price:Number(values.Attempt_price),
@@ -172,8 +172,8 @@ const CreateQuestionsComp = () => {
       <Container>
          {typeof question == 'object' &&
             <QuestionPreiew 
-               setModal={setQuestion}
                question={question}
+               setModal={setQuestion}
             />
          }
          <Body>

@@ -2,17 +2,23 @@ import {
    Header,
    HeaderBodys,
    HeaderConnect,
-   HeaderBalance
+   HeaderBalance,
+   HeaderСonclusion
 } from './Header.styled'
-
-import { useMoralis } from "react-moralis";
 import {useAppDispatch} from '../../../store/hooks';
 import {setUser} from '../../../store/sliced/user/user.sliced'
 import { useEffect } from "react";
+import { 
+   useMoralis,
+} from "react-moralis";
+import {useCheckBalance} from '../../../hooks/withdrawal/checkBalance'
+import {useWithdrawPayments} from '../../../hooks/withdrawal/withdrawPayments'
 
 export const HeaderComp = () => {
    const dispatch = useAppDispatch();
-   const {authenticate, logout, account} = useMoralis();
+   const {authenticate, account, logout} = useMoralis();
+   const balance = useCheckBalance()
+   const payments = useWithdrawPayments()
 
    useEffect(() => {
       if(account !== null) {
@@ -30,7 +36,13 @@ export const HeaderComp = () => {
       <Header>
          <HeaderBodys></HeaderBodys>
          <HeaderBodys>
-            <HeaderBalance>0 ETH</HeaderBalance>
+            {account && 
+               <>
+                  <HeaderBalance>{balance} ETH</HeaderBalance>
+                  <HeaderСonclusion onClick={payments} >Withdrawal of money</HeaderСonclusion>
+               </>
+            }
+            
             <HeaderConnect onClick={connectWallet}>{account ? 'Disconnect' : 'Authenticate'}</HeaderConnect>
          </HeaderBodys>
       </Header>

@@ -33,6 +33,13 @@ export const HeaderConnect = styled.div`
    color: rgb(33, 191, 150);
 `
 
+export const HeaderСonclusion = styled(HeaderConnect)`
+   margin-left:30px;
+   font-size:17px;
+   color: #116191;
+`
+
+
 export const HeaderBalance = styled.div`
    text-align: center;
    white-space: nowrap;

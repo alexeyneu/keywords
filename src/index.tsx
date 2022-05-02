@@ -13,8 +13,8 @@ const root = createRoot(container);
 root.render(
   <Provider store={store}>
     <MoralisProvider
-      serverUrl="https://6kqaf9k7pda7.usemoralis.com:2053/server"
-      appId="AfdWG893nj2vEP5o0tUwoZiU38rPTchFwOHmvFAy"
+      serverUrl="https://delcpondbwcr.usemoralis.com:2053/server"
+      appId="T8Wt7bEUXXLryy3ZVqo5CbRwNYb8NcT0Blk2Yt7y"
     >
       <BrowserRouter>
         <App />

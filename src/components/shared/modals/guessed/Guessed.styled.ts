@@ -25,7 +25,7 @@ export const GuessedModal = styled.div`
    height: 30%;
    background-color: #fff;
    border-radius:30px;
-   
+   margin:0 auto;
 `
 
 export const HeaderGuessed = styled(Header)`
