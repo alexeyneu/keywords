@@ -12,9 +12,9 @@ import { setError } from "../store/sliced/error/error.sliced"
 export const  useGuess = () => {
    const dispatch = useAppDispatch();
    const { fetch } = useWeb3ExecuteFunction()
-   const { Moralis,user} = useMoralis()
+   const { Moralis} = useMoralis()
 
-   const guess = async (tokenId:string, msgValue:number, prize:number, word:string) => {
+   const guess = async (tokenId:string, msgValue:number, prize:number, word:string, setStatus: React.Dispatch<React.SetStateAction<string>> ) => {
 
       const options = {
          contractAddress: address,
@@ -68,6 +68,7 @@ export const  useGuess = () => {
             dispatch(setError("Try again"))
          },
       })
+      setStatus("")
 
       const incrementAttempt = async () => {
          const Question = Moralis.Object.extend("questions");
