@@ -15,7 +15,7 @@ import {
 
 import {Formik} from 'formik'
 import * as yup from 'yup';
-import { useCallback, useMemo, useRef } from "react"
+import { useCallback, useMemo, useRef, useState } from "react"
 import {wordValid} from '../../../../shared/variable'
 import {useMoralis} from 'react-moralis'
 import lock from '../../../../assets/img/lock.svg'
@@ -27,7 +27,8 @@ interface props{
 }
 
 export const Guessed = ({setModal, question}: props) => {
-   const {chainId, isWeb3Enabled} = useMoralis()
+   const {chainId, isWeb3Enabled, isAuthenticated, authenticate} = useMoralis()
+   const [status, setStatus] = useState<string>('')
    const guess = useGuess()
 
    const valid = useMemo(() => {
@@ -72,8 +73,16 @@ export const Guessed = ({setModal, question}: props) => {
                   Word:'',
                }}
                validationSchema={valid}
-               onSubmit={(values) => {
-                  !question.guessed && guess(String(Number(question.id) - 2), question.attempt_price, question.prize, values.Word)
+               onSubmit={async (values) => {
+                  if(!isWeb3Enabled || !isAuthenticated) {
+                     await authenticate()
+                  }
+
+                  setStatus("Sending a word for verification");
+
+                  !question.guessed && 
+                  await guess(String(question.ID), question.attempt_price, question.prize, values.Word)
+                  setStatus("");
                }}
             >
                {({ errors, touched, values, }) => (
@@ -89,19 +98,24 @@ export const Guessed = ({setModal, question}: props) => {
 
                      {errors.Word && touched.Word && <Error>{errors.Word}</Error>}
 
-                     <Next type="submit">
-                        {
-                        chainId === '0x4' &&
-                        isWeb3Enabled ?
-                           'ok'
-                           :
-                           <img 
-                              width="25px"
-                              src={lock}
-                              alt=""
-                           />
-                        }
-                     </Next>
+                     {status === "Sending a word for verification" ?
+                        <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
+                        :
+                        <Next type="submit">
+                           {
+                           (chainId === '0x4' &&
+                           isWeb3Enabled) || 
+                           isAuthenticated ?
+                              'ok'
+                              :
+                              <img 
+                                 width="25px"
+                                 src={lock}
+                                 alt=""
+                              />
+                           }
+                        </Next>
+                     }
                   </GuessedForm>
                )}
             </Formik>

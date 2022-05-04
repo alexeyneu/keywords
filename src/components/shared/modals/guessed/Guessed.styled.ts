@@ -22,7 +22,7 @@ export const GuessedModal = styled.div`
    top:60px;
 
    width: 60%;
-   height: 30%;
+   height: 40%;
    background-color: #fff;
    border-radius:30px;
    margin:0 auto;
@@ -40,7 +40,7 @@ export const GuessedForm = styled(Form)`
 `
 
 export const GuessedInput = styled(Field)`
-   background-color:#e27d5f;
+   background-color:white;
 
    width: 50%;
    height: 45px;
@@ -49,12 +49,14 @@ export const GuessedInput = styled(Field)`
    margin:20px 0;
 
    outline: none;
-   border: none;
-   border-radius:30px;
 
    font-family: 'Open Sans';
    font-size:17px;
-   color: white;
+   color: #000;
+
+   &::placeholder { 
+      color:#000;
+   }
 `
 
 export const Error = styled.p`
@@ -65,17 +67,13 @@ export const Error = styled.p`
 `
 
 export const Next = styled.button`
-   width: 30%;
-   height: 44px;
-
-   position: absolute;
-   bottom: 20px;
-   left: 50%;
-   transform: translate(-50%, 0);
+   width: 50%;
+   height: 64px;
+   margin-top:20px;
 
    border-radius:15px;
    font-family: 'Open Sans';
    font-size:27px;
-   background-color:#e27d5f;
+   background-color:#1e1e70;
    color: white;
 `

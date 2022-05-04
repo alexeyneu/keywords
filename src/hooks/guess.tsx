@@ -12,17 +12,16 @@ import { setError } from "../store/sliced/error/error.sliced"
 export const  useGuess = () => {
    const dispatch = useAppDispatch();
    const { fetch } = useWeb3ExecuteFunction()
-   const { Moralis} = useMoralis()
+   const { Moralis,user} = useMoralis()
 
    const guess = async (tokenId:string, msgValue:number, prize:number, word:string) => {
-      console.log(msgValue);
 
       const options = {
          contractAddress: address,
          functionName: "guess",
          abi: abi,
          params: {
-            tokenId:Number(tokenId),
+            tokenId:String(Number(tokenId) - 1),
             word:word
          },
          msgValue: msgValue,
@@ -32,26 +31,30 @@ export const  useGuess = () => {
          params: options,
          onSuccess: (tx:any) => tx.wait().then((newTx:any) => {
             async function isGuessed() {
-               const Question = Moralis.Object.extend("questions");
-               const query = new Moralis.Query(Question);
+               const Guessed = Moralis.Object.extend("guessed");
+               const query = new Moralis.Query(Guessed);
                const obj = await query
-               .equalTo("ID", tokenId)
+               .equalTo("tokenId", String(Number(tokenId) - 1))
                .find()
 
                console.log(obj)
-               const result:boolean = obj[0].attributes.result;
-                  
-               if(result) {
-                  dispatch(setSuccess(`You won: ${prize} ETH!`))
-                  obj[0].set('guessed', true)
-                  obj[0].save();
+               let result = await obj[obj.length - 1].attributes.result;
 
-                  const user = Moralis.User.current();
-      
-                  if(user) {
-                     console.log(user)
-                     user.set('balance',  prize + Number(user.attributes.balance))
-                     user.save()
+
+               if(result) {
+                  dispatch(setSuccess(`You won: ${prize} ETH!`));
+                  
+                  const Question = Moralis.Object.extend("questions");
+                  const query = new Moralis.Query(Question);
+                  const question = await query
+                  .equalTo("ID", String(tokenId))
+                  .find()
+                  console.log(question[0])
+
+                  if(typeof question[0].set === 'function') {
+                     question[0].set('guessed', true)
+                     question[0].save();
+                     console.log(question[0])
                   }
                } else {
                   dispatch(setError("You didn't guess"))
@@ -62,7 +65,7 @@ export const  useGuess = () => {
          }),
          onError: (error:any) => {
             console.log(error.message);
-            dispatch(setError("You didn't guess"))
+            dispatch(setError("Try again"))
          },
       })
 

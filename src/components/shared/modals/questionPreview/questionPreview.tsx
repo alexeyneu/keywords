@@ -1,8 +1,9 @@
 import { 
    Body,
-   Header,
-   TextInfo,
-   Img,
+   QuestionsPrev,
+   Info,
+   InfoBody,
+   InfoText,
    Next,
 } from "../question/Question.styled"
 
@@ -14,7 +15,6 @@ import {
 
 import {props} from '../question/question.type'
 import { useCallback, useRef } from "react"
-
 
 const QuestionPreiew:React.FC<props> = ({setModal, question}) => {
    const deleateBg = useRef<HTMLDivElement>(null);
@@ -36,40 +36,41 @@ const QuestionPreiew:React.FC<props> = ({setModal, question}) => {
       }
 
    }, [setModal, deleate, deleateBg])
+
    return(
       <BodyBG 
          ref={deleateBg}
          onClick={(event: any) => thisDeleateModal(event)}
       >
          <Body>
-            <Header>
-               <DeleateModalBody>
-                  <DeleateModal 
-                     ref={deleate}
-                     className="deleate"
-                  />
-               </DeleateModalBody>
-            </Header>
-            <TextInfo>
-               Date create: 
-               {
-                 ` ${new Date(question.date).getFullYear()}.${new Date(question.date).getMonth()}.${new Date(question.date).getDate()}`
-               }
-            </TextInfo>
-            <TextInfo>Id: {question.ID}</TextInfo>
-            <TextInfo>How many attempts: {question.attempt}</TextInfo>
-            <Img
-               src={question.img} 
+            <DeleateModalBody>
+               <DeleateModal 
+                  ref={deleate}
+                  className="deleate"
+               />
+            </DeleateModalBody>
+
+            <QuestionsPrev 
+               src={question.img}
                alt=""
             />
 
-            <TextInfo>The number of words broken down by letters: {question.wordbroken}</TextInfo>
-            <TextInfo>Prize: ETH {question.prize - (0.05 * question.prize)}</TextInfo>
-            <TextInfo>The cost of the attempt: ETH {question.attempt_price}</TextInfo>
+            <Info>
+               <InfoBody>
+                  <InfoText>Prize: {question.prize} ETH</InfoText>
+                  <InfoText>Question: #{question.ID}</InfoText>
+                  <InfoText>Attempts made: {question.attempt}</InfoText>
+                  <InfoText>The cost of the attmept: {question.attempt_price} ETH</InfoText>
+                  <InfoText>Word: {question.wordbroken}</InfoText>
+               </InfoBody>
 
-            <Next 
-               ref={deleateOk}
-            >Ok</Next>
+               <Next 
+                  ref={deleateOk}
+                  onClick={(event: any) => thisDeleateModal(event)}
+               >
+                  ok
+               </Next>
+            </Info>
          </Body>
       </BodyBG>
    )

@@ -17,13 +17,15 @@ const Pagination = ({ pages, setPages, allPages, }: props) => {
    }
 
    return (
-        <div>
+        <div className="pagination">
             <button 
                onClick={updatePages('prev')}
                className="pagination__button">Previous</button>
-            Page
-            <button className="pagination__button">{pages + 1}</button>
-            of {Math.ceil(allPages / 10)}
+            <button className="pagination__button_center">
+               Page 
+               {pages + 1}
+               of {Math.ceil(allPages / 10)}
+            </button>
             <button 
                onClick={updatePages('next')}
                className="pagination__button">Next</button>

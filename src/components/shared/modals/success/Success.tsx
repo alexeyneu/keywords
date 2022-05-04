@@ -16,8 +16,6 @@ import {
 import { useAppDispatch } from "../../../../store/hooks"
 import { setSuccess } from "../../../../store/sliced/success/success.slice"
 
-
-
 interface props {
    message:string;
 }

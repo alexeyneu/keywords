@@ -3,7 +3,6 @@ import {
    ErrorModalUI,
    ErrorHeader,
    Error,
-   
 } from "./Error.styled"
 
 import {

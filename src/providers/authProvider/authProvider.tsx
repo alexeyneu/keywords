@@ -9,14 +9,13 @@ interface props {
 
 export const AuthProvider = ({children}: props) => {
    const dispatch = useAppDispatch();
-   const {Moralis, isInitializing} = useMoralis();
+   const {user, isInitializing} = useMoralis();
 
    useEffect(() => {
       if(isInitializing) {
-         const user = Moralis.User.current()
          dispatch(setUser(user?.attributes.ethAddress));
       }
-   }, [Moralis, dispatch, isInitializing])
+   }, [user, dispatch, isInitializing])
 
    return(
       <>

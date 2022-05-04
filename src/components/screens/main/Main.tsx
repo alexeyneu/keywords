@@ -1,11 +1,20 @@
 import { 
    Container,
+   AboutTitle,
+   AboutText,
+   BodyFilter,
+   FilterType,
+   FilterTypeTitle,
+   Filtertext,
    ContainerQuestions,
    Questions,
-   QuestionsTitle,
-   QuestionsBlock,
-   BodyFilter,
-   Filtertext,
+   QuestionsPrev,
+   QuestionsInfo,
+   QuestionsHeader,
+   QuestionsHeaderText,
+   GuessBtn,
+   Info,
+   InfoText,
 } from "./Main.styled"
 
 import {useState, useEffect, useCallback} from 'react'
@@ -44,7 +53,7 @@ const MainComp = () => {
             id: question[index]._objCount,
          }
       })
-   }, [question])
+   }, [question, navigate])
 
    useEffect(() => {
       async function getQuestions () {
@@ -55,7 +64,6 @@ const MainComp = () => {
          filter.attempts && query.descending("attempt")
          query.equalTo("guessed", filter.guessed)
          filter.my && query.equalTo("user", Moralis.User.current())
-
          const objAll = await query
          .find();
 
@@ -85,85 +93,82 @@ const MainComp = () => {
 
    return(
       <Container>
+         <AboutTitle>About</AboutTitle>
+         <AboutText>
+            Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+            The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
+         </AboutText>
+
+         <BodyFilter>
+            <FilterType>
+               <FilterTypeTitle>Questions: </FilterTypeTitle>
+               
+               <Filtertext isChecked={!filter.guessed && !filter.my} >all |</Filtertext>
+               
+               <Filtertext 
+                  isChecked={filter.guessed}
+                  onClick={onFilter({guessed:!filter.guessed})}
+               >guesse |</Filtertext>
+
+               <Filtertext 
+                  isChecked={filter.my}
+                  onClick={onFilter({my:!filter.my})}
+               >my</Filtertext>
+            </FilterType>
+
+            <FilterType>
+               <FilterTypeTitle>Sort by: </FilterTypeTitle>
+
+               <Filtertext 
+                  isChecked={filter.date}
+                  onClick={onFilter({date:!filter.date})}
+               >date |</Filtertext>
+
+               <Filtertext 
+                  isChecked={filter.prize}
+                  onClick={onFilter({prize:!filter.prize})}
+               >prize |</Filtertext>
+
+               <Filtertext  
+                  isChecked={filter.attempts}
+                  onClick={onFilter({attempts:!filter.attempts})}
+               >attempts</Filtertext>
+            </FilterType>
+         </BodyFilter>
 
          <ContainerQuestions>
-            <BodyFilter>
-               <Filtertext>
-                  <input 
-                     type="checkbox"
-                     onChange={onFilter({my:!filter.my})}
-                  />
-                  my questions
-               </Filtertext>
-
-               <Filtertext>
-                  <input 
-                     type="checkbox"
-                     onChange={onFilter({guessed:!filter.guessed})}
-                  />
-                  all guessed questions
-               </Filtertext>
-
-               <Filtertext>
-                  <input 
-                     type="checkbox"
-                     onChange={onFilter({date:!filter.date})}
-                  />
-                  From old questions to new ones
-               </Filtertext>
-
-               <Filtertext>
-                  <input 
-                     type="checkbox"
-                     onChange={onFilter({prize:!filter.prize})}
-                  />
-                  From a bigger prize to a smaller one
-               </Filtertext>
-
-               <Filtertext>
-                  <input 
-                     type="checkbox"
-                     onChange={onFilter({attempts:!filter.attempts})}
-                  />
-                  From big attempts to smaller ones
-               </Filtertext>
-            </BodyFilter>
-
-            {question !== null &&
-               question.map((question:any, index:number) => {
-                  return(
-                     <div key={question.date}>
-                        <Questions onClick={navigateQuestion(index)}>
-                           <QuestionsBlock>
-                              <QuestionsTitle>Question №: {Number(question.attributes.ID)}</QuestionsTitle>
-                              <QuestionsTitle>Image URL: {question.attributes.img} </QuestionsTitle>
-                           </QuestionsBlock>
-
-                           <QuestionsBlock>
-                              <QuestionsTitle>Number of words: {question.attributes.wordbroken}</QuestionsTitle>
-                              <QuestionsTitle>Attempts made: {question.attributes.attempt}</QuestionsTitle>
-                              <QuestionsTitle>Date create: 
-                                 {
-                                 `  ${new Date(question.updatedAt).getFullYear()}.
-                                    ${new Date(question.updatedAt).getMonth()}.
-                                    ${new Date(question.updatedAt).getDate()}
-                                 `
-                                 }
-                              </QuestionsTitle>
-                           </QuestionsBlock>
-                        </Questions>
-                     </div>
-                  )
-               })
-            }
+         {question !== null &&
+            question.map((question:any, index:number) => {
+               return(
+                  <Questions key={question.ID}>
+                     <QuestionsPrev 
+                        src={question.attributes.img}
+                        alt=""
+                     />
+                     <QuestionsInfo>
+                        <QuestionsHeader>
+                           <QuestionsHeaderText>Guess what is shown in the picture?</QuestionsHeaderText>
+                           <QuestionsHeaderText>Prize {question.attributes.prize}</QuestionsHeaderText>
+                        </QuestionsHeader>
+                        <GuessBtn onClick={navigateQuestion(index)}>Guess</GuessBtn>
+                     
+                        <Info>
+                           <InfoText>Question #{question.attributes.ID}</InfoText>
+                           <InfoText>Attempts made: {question.attributes.attempt}</InfoText>
+                           <InfoText>The cost of the attmept: {Moralis.Units.FromWei(question.attributes.attempt_price)}</InfoText>
+                        </Info>
+                     </QuestionsInfo>
+                  </Questions>
+               )
+            })
+         }
+         </ContainerQuestions>
 
          <Pagination 
-            pages={pages}
-            allPages={allPages}
+            pages={pages} 
             setPages={setPages}
+            allPages={allPages}
          />
-
-         </ContainerQuestions>
       </Container>
    )
 }

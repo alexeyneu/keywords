@@ -1,9 +1,11 @@
 import { 
-   Container,
+   Title,
+   TextInfo,
    Body,
    BodyForm,
+   BodyInput,
    Input,
-   Title,
+   TitleInput,
    Submit,
    Error,
    Loading
@@ -34,7 +36,7 @@ const CreateQuestionsComp = () => {
    const [img, setImg] = useState<string>('')
 
    const {saveFile} = useMoralisFile();
-   const {Moralis, chainId, isWeb3Enabled} = useMoralis();
+   const {Moralis, authenticate, chainId, isWeb3Enabled, isAuthenticated} = useMoralis();
    const { save } = useNewMoralisObject("questions");
    const mint = useSafeMint()
    const imageFee = useImageFee()
@@ -50,6 +52,7 @@ const CreateQuestionsComp = () => {
    const submit = async (Word:string) => {
       const fetchStr = Word.replace(/\s/g, "+");
 
+      setStatus("Sending ethereum")
       const payble = await imageFee();
       if(payble) {
          setStatus('Image generation');
@@ -70,6 +73,8 @@ const CreateQuestionsComp = () => {
             })
 
          setStatus('Image generation The picture has been generated!');
+      } else {
+         setStatus("Not enough Ethereum")
       }
    }
    
@@ -94,8 +99,10 @@ const CreateQuestionsComp = () => {
          return Wordbroken.slice(0, -1)
       }
       
+      let validID = objLast ? String(Number(objLast.attributes.ID)) : 0;
+
       let questions = {
-         ID: String(Number(objLast.attributes.ID) + 1),
+         ID: String(Number(validID) + 1), 
          guessed:false,
          wordbroken:Wordbroken(),
          attempt:0,
@@ -106,11 +113,18 @@ const CreateQuestionsComp = () => {
          user:Moralis.User.current(),
       }
 
-      const meta = {
+      let meta = {
          "name":`MindBreaker.Games question #${questions.ID}`,
          "description":"What is shown in the picture?",
          "image":questions.img
       }
+
+      const fileMeta = new Moralis.File("file.json", {
+         base64: btoa(JSON.stringify(meta)),
+      });
+
+      const metaUrl = await fileMeta.saveIPFS()
+      console.log(metaUrl)
 
       const questionsMint ={ 
          word:values.Word,
@@ -118,14 +132,13 @@ const CreateQuestionsComp = () => {
          prize: questions.prize,
       }
 
-      const isMint = await mint(questionsMint, JSON.stringify(meta), setStatus)
+      const isMint = await mint(questionsMint, metaUrl._url, setStatus)
 
       if(isMint) {
          await save(
             questions,
             {
                onSuccess:(result:any) => {
-                  console.log(result)
                   dispatch(setSuccess("You have created a word!"));
                }, 
                onError:(error:any) => {
@@ -155,8 +168,11 @@ const CreateQuestionsComp = () => {
    
          return Wordbroken.slice(0, -1)
       }
+
+      let validID = objLast ? String(Number(objLast.attributes.ID)) : 0;
+
       let questions = {
-         ID:String(Number(objLast.attributes.ID) + 1), 
+         ID:String(Number(validID) + 1), 
          wordbroken:Wordbroken(),
          attempt:0,
          attempt_price:Number(values.Attempt_price),
@@ -169,7 +185,7 @@ const CreateQuestionsComp = () => {
    }
 
    return(
-      <Container>
+      <>
          {typeof question == 'object' &&
             <QuestionPreiew 
                question={question}
@@ -177,6 +193,9 @@ const CreateQuestionsComp = () => {
             />
          }
          <Body>
+            <Title>Create question</Title>
+
+            <TextInfo>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</TextInfo>
             <Formik
                initialValues={{
                   Word:'',
@@ -184,50 +203,62 @@ const CreateQuestionsComp = () => {
                   Attempt_price:'',
                }}
                validationSchema={valid}
-               onSubmit={(values) => {
-                  if(chainId === '0x4' && isWeb3Enabled) {
-                     status === '' && submit(values.Word)
-                     status === 'Image generation The picture has been generated!' && createQuestions(values)
+               onSubmit={async (values) => {
+                  if(!isWeb3Enabled || !isAuthenticated) {
+                     await authenticate()
                   }
+                  
+                  status === '' && submit(values.Word)
+                  status === 'Image generation The picture has been generated!' && createQuestions(values)
                }}
             >
                {({ errors, touched, values, }) => (
                   <BodyForm>
-                     <Title>Word</Title>
-                     <Input 
-                        value={values.Word} 
-                        name='Word'
-                        placeholder='Word'
-                        type='text'
-                        autoComplete="off"
-                        required
-                     />
-                     {errors.Word && touched.Word && <Error>{errors.Word}</Error>}
+                     <BodyInput>
+                        <TitleInput>Word:</TitleInput>
+                        <Input 
+                           value={values.Word} 
+                           name='Word'
+                           placeholder='Word'
+                           type='text'
+                           autoComplete="off"
+                           required
+                        />
+                        {errors.Word && touched.Word && <Error>{errors.Word}</Error>}
+                     </BodyInput>
 
-                     <Title>Prize</Title>
-                     <Input 
-                        value={values.Prize} 
-                        name='Prize'
-                        placeholder='Prize'
-                        type='number'
-                        autoComplete="off"
-                        required
-                     />
-                     {errors.Prize && touched.Prize && <Error>{errors.Prize}</Error>}
+                     <BodyInput>
+                        <TitleInput>Prize:</TitleInput>
+                        <Input 
+                           value={values.Prize} 
+                           name='Prize'
+                           placeholder='Prize'
+                           type='number'
+                           autoComplete="off"
+                           required
+                        />
+                        {errors.Prize && touched.Prize && <Error>{errors.Prize}</Error>}
+                     </BodyInput>
 
-                     <Title>Attempt price</Title>
-                     <Input 
-                        value={values.Attempt_price} 
-                        name='Attempt_price'
-                        placeholder='Attempt_price'
-                        type='number'
-                        autoComplete="off"
-                        required
-                     />
-                     {errors.Attempt_price && touched.Attempt_price && <Error>{errors.Attempt_price}</Error>}
+                     <BodyInput>
+                        <TitleInput>Attempt price:</TitleInput>
+                        <Input 
+                           value={values.Attempt_price} 
+                           name='Attempt_price'
+                           placeholder='Attempt_price'
+                           type='number'
+                           autoComplete="off"
+                           required
+                        />
+                        {errors.Attempt_price && touched.Attempt_price && <Error>{errors.Attempt_price}</Error>}
+                     </BodyInput>
 
                      <Loading>{status}</Loading>
-                     {(status === "Image generation" || status === "Creating a question") &&
+                     {(
+                        status === "Image generation" || 
+                        status === "Creating a question" ||
+                        status === "Sending ethereum"
+                     ) &&
                         <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
                      }
 
@@ -243,7 +274,9 @@ const CreateQuestionsComp = () => {
                      
                      
                      {status === "" ?
-                        chainId === '0x4' && isWeb3Enabled ?
+                        (chainId === '0x4' &&
+                        isWeb3Enabled) || 
+                        isAuthenticated ?
                            <Submit>ok</Submit>
                            :
                            <Submit>
@@ -260,7 +293,7 @@ const CreateQuestionsComp = () => {
                )}
             </Formik>
          </Body>
-      </Container>
+      </>
    )
 }
 

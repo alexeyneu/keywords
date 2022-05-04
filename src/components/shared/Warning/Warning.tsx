@@ -5,7 +5,7 @@ import {
 import {useMoralis} from 'react-moralis'
 
 export const WarningComp = () => {
-   const {chainId, isWeb3Enabled} = useMoralis()
+   const {chainId, isWeb3Enabled, isAuthenticated} = useMoralis()
 
    return(
       <>
@@ -15,7 +15,7 @@ export const WarningComp = () => {
             </Warning>
          }
 
-         {!isWeb3Enabled &&
+         {!isAuthenticated &&
             <Warning>
                Please connect your wallet
             </Warning>

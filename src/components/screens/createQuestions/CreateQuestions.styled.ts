@@ -1,36 +1,44 @@
 import styled from "styled-components";
 import {Form, Field} from "formik";
 
-export const Container = styled.div`
-   width: 100%;
-   height: 100%;
-   background: #84cdca;
-
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: center;
+export const Body = styled.div`
+   max-width:1240px;
+   margin:0 auto;
+   margin-top:110px;
 `
 
-export const Body = styled.div`
-   width: 70%;
-   height: 750px;
-   padding-top:30px;
+export const Title = styled.h2`
+   font-family: Roboto, sans-serif;
+   font-size: 22px;
+   text-align: center;
+`
 
-   background: #e8a87c;
-   border-radius:10px;
+export const TextInfo = styled.p`
+   font-family: Roboto, sans-serif;
+   font-size: 17px;
+   text-align: left;
+   line-height:25px;
+   padding:0 40px;
+   margin-top:50px;
+   margin-bottom:40px;
 `
 
 export const BodyForm = styled(Form)`
    display:flex;
    flex-direction: column;
    align-items: center;
+   max-width:65%;
+   margin:0 auto;
 `
 
-export const Title = styled.h2`
-   font-family: 'Open Sans';
-   font-size:25px;
-   color: #40b3a2;
+export const BodyInput = styled.div`
+   width: 100%;
+`
+
+export const TitleInput = styled.span`
+   font-family: Roboto, sans-serif;
+   font-size: 19px;
+   font-weight: 600;
 `
 
 export const Input = styled(Field)`
@@ -41,8 +49,7 @@ export const Input = styled(Field)`
    margin:20px 0;
 
    outline: none;
-   border: none;
-   border-radius:30px;
+   margin-left:10px;
 
    font-family: 'Open Sans';
    font-size:17px;
@@ -50,19 +57,19 @@ export const Input = styled(Field)`
 `
 
 export const Submit = styled.button`
-   width: 10em;
-   height: 2em;
+   width: 12em;
+   height: 2.3em;
 
    margin:20px 0;
 
    outline: none;
    border: none;
-   border-radius:30px;
+   border-radius:15px;
 
    font-family: 'Open Sans';
    font-size:23px;
    color: white;
-   background: #c38d9d;
+   background: #1e1e70;
 `
 
 export const Error = styled.p`
