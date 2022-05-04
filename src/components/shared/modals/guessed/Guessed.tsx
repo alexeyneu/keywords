@@ -79,9 +79,9 @@ export const Guessed = ({setModal, question}: props) => {
                   }
 
                   setStatus("Sending a word for verification");
-
                   !question.guessed && 
                   await guess(String(question.ID), question.attempt_price, question.prize, values.Word)
+
                   setStatus("");
                }}
             >

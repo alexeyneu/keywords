@@ -156,6 +156,7 @@ const MainComp = () => {
                            <InfoText>Question #{question.attributes.ID}</InfoText>
                            <InfoText>Attempts made: {question.attributes.attempt}</InfoText>
                            <InfoText>The cost of the attmept: {Moralis.Units.FromWei(question.attributes.attempt_price)}</InfoText>
+                           <InfoText>Word: {question.attributes.wordbroken}</InfoText>
                         </Info>
                      </QuestionsInfo>
                   </Questions>
