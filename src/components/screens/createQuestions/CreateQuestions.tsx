@@ -57,7 +57,7 @@ const CreateQuestionsComp = () => {
       if(payble) {
          setStatus('Image generation');
 
-         await fetch(`${urlImg}${fetchStr}`)
+         await fetch(`https://api.mintface.io/image?q=`) // ${urlImg}${fetchStr}
             .then( response =>  response.blob())
             .then( async (blob) => {
                let file = new File([blob], "name.png");
@@ -123,8 +123,8 @@ const CreateQuestionsComp = () => {
          base64: btoa(JSON.stringify(meta)),
       });
 
-      const metaUrl = await fileMeta.saveIPFS()
-      console.log(metaUrl)
+      const metaUrl:any = await fileMeta.saveIPFS()
+      console.log(metaUrl._ipfs.replace(`"`, ''))
 
       const questionsMint ={ 
          word:values.Word,
@@ -132,7 +132,7 @@ const CreateQuestionsComp = () => {
          prize: questions.prize,
       }
 
-      const isMint = await mint(questionsMint, metaUrl._url, setStatus)
+      const isMint = await mint(questionsMint, metaUrl._ipfs.replace(`"`, '') , setStatus)
 
       if(isMint) {
          await save(

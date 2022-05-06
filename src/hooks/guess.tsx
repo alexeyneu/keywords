@@ -59,6 +59,8 @@ export const  useGuess = () => {
                } else {
                   dispatch(setError("You didn't guess"))
                }
+
+               setStatus("")
             }
 
             isGuessed()
@@ -68,7 +70,6 @@ export const  useGuess = () => {
             dispatch(setError("Try again"))
          },
       })
-      setStatus("")
 
       const incrementAttempt = async () => {
          const Question = Moralis.Object.extend("questions");
@@ -81,7 +82,7 @@ export const  useGuess = () => {
          obj[0].save();
       }
 
-      incrementAttempt()
+      await incrementAttempt()
    }
 
    return guess

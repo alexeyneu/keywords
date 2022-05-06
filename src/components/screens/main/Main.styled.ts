@@ -51,7 +51,6 @@ export const Filtertext = styled.div.attrs((props: {isChecked: boolean}) => prop
 `
 
 export const ContainerQuestions = styled.div`
-   height:100%;
    width:90%;
    margin-top:20px;
    margin:0 auto;
