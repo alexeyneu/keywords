@@ -15,6 +15,9 @@ import {
    GuessBtn,
    Info,
    InfoText,
+   BlockWord,
+   BlockWordFlex,
+   BlockNewWord
 } from "./Main.styled"
 
 import {useState, useEffect, useCallback} from 'react'
@@ -23,6 +26,7 @@ import {
    useMoralis,
 } from "react-moralis";
 import Pagination from "./pagination/Pagination";
+import { WordBlocks } from "./WordBlocks";
 
 interface filter{
    guessed:boolean;
@@ -157,6 +161,10 @@ const MainComp = () => {
                            <InfoText>Attempts made: {question.attributes.attempt}</InfoText>
                            <InfoText>The cost of the attmept: {Moralis.Units.FromWei(question.attributes.attempt_price)}</InfoText>
                            <InfoText>Word: {question.attributes.wordbroken}</InfoText>
+
+                           <WordBlocks 
+                              wordbroken={question.attributes.wordbroken}
+                           />
                         </Info>
                      </QuestionsInfo>
                   </Questions>

@@ -134,3 +134,19 @@ export const InfoText = styled.div`
    font-size:20px;
 `
 
+export const BlockWordFlex = styled.div`
+   display:flex;
+   margin-top:10px;
+`
+
+export const BlockWord = styled.div`
+   border:1px solid #000;
+   border-top:2px solid #000;
+   border-bottom:2px solid #000;
+   width:40px;
+   height:40px;
+`
+
+export const BlockNewWord = styled(BlockWord)`
+   margin-left:10px;
+`
