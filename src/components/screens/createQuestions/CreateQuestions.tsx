@@ -124,6 +124,7 @@ const CreateQuestionsComp = () => {
       });
 
       const metaUrl:any = await fileMeta.saveIPFS()
+      console.log(metaUrl._ipfs)
       console.log(metaUrl._ipfs.replace(`"`, ''))
 
       const questionsMint ={ 
@@ -133,6 +134,7 @@ const CreateQuestionsComp = () => {
       }
 
       const isMint = await mint(questionsMint, metaUrl._ipfs.replace(`"`, '') , setStatus)
+      
 
       if(isMint) {
          await save(

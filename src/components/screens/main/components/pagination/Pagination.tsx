@@ -1,5 +1,3 @@
-
-
 interface props {
    pages:number;
    setPages:React.Dispatch<React.SetStateAction<number>>;

@@ -26,7 +26,7 @@ export const useSafeMint = () => {
                abi: abi,
                params: {
                   wordHash:ethers.utils.id(questions.word),
-                  uri:JSON.stringify(meta),
+                  uri:meta,
                   tryValue: questions.attempt_price
                },
 

@@ -17,7 +17,6 @@ export const WordBlocks = ({wordbroken}: props) => {
       const lenghtWord = wordbrokenArr[0].split(':');
       wordbrokenArr.shift();
       wordbrokenArr.unshift(...lenghtWord);
-      console.log(wordbrokenArr)
 
       for(let i = 0; i < Number(wordbrokenArr[0]); i++) {
          for(let iWord = 0; iWord < Number(wordbrokenArr[i + 1]); iWord++) {
@@ -33,8 +32,6 @@ export const WordBlocks = ({wordbroken}: props) => {
          }
       }
    }, [])
-
-   console.log(wordArray)
 
    return (
       <BlockWordFlex>

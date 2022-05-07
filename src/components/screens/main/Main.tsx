@@ -1,34 +1,16 @@
 import { 
    Container,
    AboutTitle,
-   AboutText,
-   BodyFilter,
-   FilterType,
-   FilterTypeTitle,
-   Filtertext,
-   ContainerQuestions,
-   Questions,
-   QuestionsPrev,
-   QuestionsInfo,
-   QuestionsHeader,
-   QuestionsHeaderText,
-   GuessBtn,
-   Info,
-   InfoText,
-   BlockWord,
-   BlockWordFlex,
-   BlockNewWord
+   AboutText
 } from "./Main.styled"
 
-import {useState, useEffect, useCallback} from 'react'
-import {useNavigate} from 'react-router-dom';
-import { 
-   useMoralis,
-} from "react-moralis";
-import Pagination from "./pagination/Pagination";
-import { WordBlocks } from "./WordBlocks";
+import {useState, useEffect, useDeferredValue} from 'react'
+import {useMoralis} from "react-moralis";
+import Pagination from "./components/pagination/Pagination";
+import { Items } from "./components/Items/Items";
+import { Filter } from "./components/Filter/Filter";
 
-interface filter{
+export interface filter{
    guessed:boolean;
    date:boolean;
    prize:boolean;
@@ -41,7 +23,7 @@ const MainComp = () => {
    const [pages, setPages] = useState<number>(0)
    const [allPages, setAllPages] = useState<number>(0);
    const [question, setQuestion] = useState<any>(null)
-   const navigate = useNavigate()
+   
    const [filter, setFilter] = useState<filter>({
       guessed:false,
       date:false,
@@ -49,25 +31,19 @@ const MainComp = () => {
       attempts:false,
       my:false,
    })
-   
-   const navigateQuestion = useCallback((index: number) => () => {
-      navigate('/question', {
-         state: {
-            ...question[index].attributes,
-            id: question[index]._objCount,
-         }
-      })
-   }, [question, navigate])
+
+   const filterDeferred = useDeferredValue(filter)
+   const pagesDeferred = useDeferredValue(pages)
 
    useEffect(() => {
       async function getQuestions () {
          const Questions = Moralis.Object.extend("questions");
          const query = new Moralis.Query(Questions);
-         filter.prize && query.descending("prize")
-         filter.date && query.ascending("date")
-         filter.attempts && query.descending("attempt")
-         query.equalTo("guessed", filter.guessed)
-         filter.my && query.equalTo("user", Moralis.User.current())
+         filterDeferred.prize && query.descending("prize")
+         filterDeferred.date && query.descending("date")
+         filterDeferred.attempts && query.descending("attempt")
+         query.equalTo("guessed", filterDeferred.guessed)
+         filterDeferred.my && query.equalTo("user", Moralis.User.current())
          const objAll = await query
          .find();
 
@@ -75,25 +51,17 @@ const MainComp = () => {
 
          const obj = await query
          .limit(10)
-         .skip(10 * pages)
+         .skip(10 * pagesDeferred)
          .find()
 
          setQuestion(obj)
       }
 
       if(isInitialized) {
+         console.log('1')
          getQuestions() 
       }
-   }, [pages, filter, Moralis, isInitialized])
-
-   const onFilter = useCallback((state:any) => () => {
-      setFilter((statePrev:filter) => {
-         return {
-            ...statePrev,
-            ...state,
-         }
-      })
-   }, [filter])
+   }, [pagesDeferred, filterDeferred, Moralis, isInitialized])
 
    return(
       <Container>
@@ -103,75 +71,14 @@ const MainComp = () => {
             The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
          </AboutText>
 
-         <BodyFilter>
-            <FilterType>
-               <FilterTypeTitle>Questions: </FilterTypeTitle>
-               
-               <Filtertext isChecked={!filter.guessed && !filter.my} >all |</Filtertext>
-               
-               <Filtertext 
-                  isChecked={filter.guessed}
-                  onClick={onFilter({guessed:!filter.guessed})}
-               >guesse |</Filtertext>
+         <Filter 
+            filter={filter}
+            setFilter={setFilter}
+         />
 
-               <Filtertext 
-                  isChecked={filter.my}
-                  onClick={onFilter({my:!filter.my})}
-               >my</Filtertext>
-            </FilterType>
-
-            <FilterType>
-               <FilterTypeTitle>Sort by: </FilterTypeTitle>
-
-               <Filtertext 
-                  isChecked={filter.date}
-                  onClick={onFilter({date:!filter.date})}
-               >date |</Filtertext>
-
-               <Filtertext 
-                  isChecked={filter.prize}
-                  onClick={onFilter({prize:!filter.prize})}
-               >prize |</Filtertext>
-
-               <Filtertext  
-                  isChecked={filter.attempts}
-                  onClick={onFilter({attempts:!filter.attempts})}
-               >attempts</Filtertext>
-            </FilterType>
-         </BodyFilter>
-
-         <ContainerQuestions>
-         {question !== null &&
-            question.map((question:any, index:number) => {
-               return(
-                  <Questions key={question.ID}>
-                     <QuestionsPrev 
-                        src={question.attributes.img}
-                        alt=""
-                     />
-                     <QuestionsInfo>
-                        <QuestionsHeader>
-                           <QuestionsHeaderText>Guess what is shown in the picture?</QuestionsHeaderText>
-                           <QuestionsHeaderText>Prize {question.attributes.prize}</QuestionsHeaderText>
-                        </QuestionsHeader>
-                        <GuessBtn onClick={navigateQuestion(index)}>Guess</GuessBtn>
-                     
-                        <Info>
-                           <InfoText>Question #{question.attributes.ID}</InfoText>
-                           <InfoText>Attempts made: {question.attributes.attempt}</InfoText>
-                           <InfoText>The cost of the attmept: {Moralis.Units.FromWei(question.attributes.attempt_price)}</InfoText>
-                           <InfoText>Word: {question.attributes.wordbroken}</InfoText>
-
-                           <WordBlocks 
-                              wordbroken={question.attributes.wordbroken}
-                           />
-                        </Info>
-                     </QuestionsInfo>
-                  </Questions>
-               )
-            })
-         }
-         </ContainerQuestions>
+         <Items 
+            question={question}
+         />
 
          <Pagination 
             pages={pages} 
