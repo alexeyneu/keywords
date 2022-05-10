@@ -49,7 +49,6 @@ export const  useGuess = () => {
                   const question = await query
                   .equalTo("ID", String(tokenId))
                   .find()
-                  console.log(question[0])
 
                   if(typeof question[0].set === 'function') {
                      question[0].set('guessed', true)

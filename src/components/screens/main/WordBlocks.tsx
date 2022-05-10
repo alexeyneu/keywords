@@ -19,14 +19,13 @@ export const WordBlocks = ({wordbroken}: props) => {
       wordbrokenArr.unshift(...lenghtWord);
 
       for(let i = 0; i < Number(wordbrokenArr[0]); i++) {
+         console.log(wordbrokenArr[i])
          for(let iWord = 0; iWord < Number(wordbrokenArr[i + 1]); iWord++) {
-            let arrNumberUnique = [];
-            arrNumberUnique.push()
-
+            
             setWordArr((prevState: any[]) => {
                return [
                   ...prevState, 
-                  wordbrokenArr[i + 1][0] // число
+                  iWord === 0 && i !== 0 ? '' : wordbrokenArr[i + 1] // число
                ]
             })
          }
@@ -36,8 +35,7 @@ export const WordBlocks = ({wordbroken}: props) => {
    return (
       <BlockWordFlex>
          {wordArray.map((word:string, index:number) => {
-            if(word === wordArray[index - 1]) {
-               
+            if(word !== '') {
                return(
                   <BlockWord key={index} />
                );

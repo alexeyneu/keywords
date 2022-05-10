@@ -1,5 +1,3 @@
-
-
 import { Route, Routes} from "react-router-dom";
 import CreateQuestions from "../../pages/CreateQuestions/CreateQuestions";
 import Main from "../../pages/main/main";
