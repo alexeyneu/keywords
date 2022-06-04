@@ -16,6 +16,7 @@ export const ListFilter = () => {
     `
 
     const UlFilterList = styled.ul`
+      width: 100%;
       display: flex;
       @media (max-width: 527px){
         margin-bottom: 3rem;
@@ -39,6 +40,14 @@ export const ListFilter = () => {
         a {
           text-decoration: none;
           color: rgba(0, 0, 0, 0.5);
+          
+          @media(max-width: 390px){
+            font-size: 16px;
+          }
+          
+          @media(max-width: 330px){
+            font-size: 12px;
+          }
         }
       }
     `

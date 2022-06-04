@@ -7,23 +7,31 @@ import {ListFilter} from "../components/ListFilter/ListFilter";
 import {Container} from "../components/Container/Container";
 import {Footer} from "../components/Footer/Footer";
 import {QuestionCard} from "../components/QuestionCard/QuestionCard";
-import BG_CARD from '../images/bg_card.png'
+import {AnimatePresence, motion} from "framer-motion";
 
 const IndexPage = () => {
-  return (
-    <main>
-        <Header/>
-        <Container>
-            <KeywordBanner/>
-            <About/>
-            <ListFilter/>
-            <div>
-                <QuestionCard/>
-            </div>
-            <Footer/>
-        </Container>
-      <GlobalStyled/>
-    </main>
+  // @ts-ignore
+    return (
+      <motion.div
+          initial={{opacity: "0", x: "-1000px"}}
+          animate={{opacity: "1", x: '0'}}
+          exit={{opacity: "0", x: "-1000px"}}
+          transition={{type: 'spring', duraction: 1.5, bounce: 0.3}}
+      >
+                <main>
+                    <Header/>
+                    <Container>
+                        <KeywordBanner/>
+                        <About/>
+                        <ListFilter/>
+                        <div>
+                            <QuestionCard/>
+                        </div>
+                        <Footer/>
+                    </Container>
+                  <GlobalStyled/>
+                </main>
+      </motion.div>
   )
 }
 

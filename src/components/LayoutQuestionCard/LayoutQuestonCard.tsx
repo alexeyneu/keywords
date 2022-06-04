@@ -1,20 +1,20 @@
 import * as React from 'react';
 import styled from "styled-components";
-import {GatsbyImage, StaticImage} from "gatsby-plugin-image";
-import BG_CARD from '../../images/bg_card.png'
+import {StaticImage} from "gatsby-plugin-image";
 import {InputKeyWord} from "../UI/InputKeyWord/InputKeyWord";
 import {Guess} from "../UI/Buttons/Buttons";
 import {ShareButton} from "../ShareButton/ShareButton";
 import {useState} from "react";
 import {ShareLinks} from "../ShareLinks/ShareLinks";
+import {motion} from "framer-motion";
 
 const CardContext = styled.div`
-    display: flex;
+  display: flex;
 
   @media(max-width: 755px){
     margin: 0 0 4rem 0 ;
   }
-  
+
   @media(max-width: 577px){
     flex-direction: column;
     padding: 7rem 0;
@@ -22,14 +22,19 @@ const CardContext = styled.div`
 `
 
 const Card = styled.div`
-    width: 100%;
-    min-height: 34.3rem;
-    height: auto;
-    position: relative;
-    box-shadow: 0px 0.4rem 3.6rem 1.2rem rgba(0, 0, 0, 0.04);
-    border-radius: 2.4rem;
-    padding: 3.6rem 3.6rem 3.6rem 9.5rem;
-    margin: 5rem 0;
+  width: 100%;
+  min-height: 34.3rem;
+  height: auto;
+  position: relative;
+  box-shadow: 0px 0.4rem 3.6rem 1.2rem rgba(0, 0, 0, 0.04);
+  border-radius: 2.4rem;
+  padding: 3.6rem 3.6rem 3.6rem 9.5rem;
+  margin: 5rem 0;
+
+  @media(max-width: 755px){
+    border-bottom-left-radius: 0;
+    margin: 5rem 0 15rem 0;
+  }
 
   @media(max-width: 577px){
     padding: 3.6rem;
@@ -51,15 +56,15 @@ const IdCardDiv = styled.div`
 `
 
 const ButtonsAction = styled.div`
-    position: absolute;
-    right: 5rem;
-    top: 17.0rem;
+  position: absolute;
+  right: 5rem;
+  top: 17.0rem;
 
   @media(max-width: 755px){
     right: 10%;
     top: 30rem;
   }
-  
+
   @media(max-width: 577px){
     top: 48rem;
     left: 5rem;
@@ -78,9 +83,9 @@ const PriceCardDiv = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  
+
   @media(max-width: 755px){
-    right: 30%;
+    left: 0;
     top: 100%;
   }
 
@@ -156,6 +161,13 @@ export const LayoutQuestionCard = () => {
 
     return(
         <>
+            <motion.div
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.7 }}
+                initial={{ opacity: 0, x: "-1000" }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+            >
                 <Card>
                     <IdCardDiv className="id-card">
                         1
@@ -217,6 +229,7 @@ export const LayoutQuestionCard = () => {
                         </div>
                     </div>
                 </Card>
+            </motion.div>
         </>
     )
 }

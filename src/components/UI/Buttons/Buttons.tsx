@@ -72,7 +72,7 @@ const Guess: React.FC<Props> =
 
 const Disconnect: React.FC<Props> =
     ({children, onClick}) => {
-    return <DisconnectButton onClick={onClick}> {children} </DisconnectButton>
+    return<DisconnectButton onClick={onClick}> {children} </DisconnectButton>
 }
 
 export {ActionButton, WidthDrawlButton, Guess, Disconnect};

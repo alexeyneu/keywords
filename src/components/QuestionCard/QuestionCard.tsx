@@ -7,6 +7,7 @@ import {Guess} from "../UI/Buttons/Buttons";
 import {ShareButton} from "../ShareButton/ShareButton";
 import {useState} from "react";
 import {ShareLinks} from "../ShareLinks/ShareLinks";
+import {motion} from "framer-motion";
 
 const dataQuestionCard = [
     {id: '1', img: '../../images/bg_card.png', price_coin: '0,01', price_currency: '200', attempts_made: '10'},
@@ -36,6 +37,11 @@ const Card = styled.div`
   border-radius: 2.4rem;
   padding: 3.6rem 3.6rem 3.6rem 9.5rem;
   margin: 5rem 0;
+
+  @media(max-width: 755px){
+    border-bottom-left-radius: 0;
+    margin: 5rem 0 15rem 0;
+  }
 
   @media(max-width: 577px){
     padding: 3.6rem;
@@ -86,7 +92,7 @@ const PriceCardDiv = styled.div`
   justify-content: center;
 
   @media(max-width: 755px){
-    right: 30%;
+    left: 0;
     top: 100%;
   }
 
@@ -163,67 +169,75 @@ export const QuestionCard = () => {
     return(
         <>
         {dataQuestionCard.map(item => (
-            <Card>
-                <IdCardDiv className="id-card">
-                    {item.id}
-                </IdCardDiv>
-                <PriceCardDiv>
-                    <p>Prize:
-                        <span>
-                            {item.price_coin}
-                        </span>
-                    </p>
-                    <span>({item.price_currency}$)</span>
-                </PriceCardDiv>
-                <ButtonsAction>
-                    <Guess>
-                        Guess
-                    </Guess>
-                </ButtonsAction>
-                <SharedDiv>
-                    <ShareButton onClick={() => setIsActiveSharedLinks(!isActiveSharedLinks)}/>
-                    <div style={{position: "absolute", right: "35%", top: "100%"}}>
-                        {isActiveSharedLinks ? <ShareLinks/> : ''}
-                    </div>
-                </SharedDiv>
-                <CardContext>
-                    <ImageCard>
-                        <StaticImage src={'../../images/bg_card.png'} alt={'bg_card'}/>
-                    </ImageCard>
-                    <ImageCardDesc>
-                        <h3>What is shown in the picture?</h3>
-                        <p>Attempt cost:
+            <motion.div
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.7 }}
+                initial={{ opacity: 0, x: "-1000" }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+            >
+                <Card>
+                    <IdCardDiv className="id-card">
+                        {item.id}
+                    </IdCardDiv>
+                    <PriceCardDiv>
+                        <p>Prize:
                             <span>
                                 {item.price_coin}
                             </span>
                         </p>
-                        <p>Attempt made:
-                            <span>
-                                {item.attempts_made}
-                            </span>
-                        </p>
-                    </ImageCardDesc>
-                </CardContext>
-                <div style={{display: 'flex', flexWrap: "wrap"}}>
-                            <div style={{margin: "1.6rem"}}>
-                                <InputKeyWord/>
-                                <InputKeyWord/>
-                                <InputKeyWord/>
-                                <InputKeyWord/>
-                            </div>
-                            <div style={{margin: "1.6rem"}}>
-                                <InputKeyWord/>
-                                <InputKeyWord/>
-                            </div>
-                            <div style={{margin: "1.6rem"}}>
-                                <InputKeyWord/>
-                                <InputKeyWord/>
-                                <InputKeyWord/>
-                                <InputKeyWord/>
-                                <InputKeyWord/>
-                            </div>
-                </div>
-            </Card>
+                        <span>({item.price_currency}$)</span>
+                    </PriceCardDiv>
+                    <ButtonsAction>
+                        <Guess>
+                            Guess
+                        </Guess>
+                    </ButtonsAction>
+                    <SharedDiv>
+                        <ShareButton onClick={() => setIsActiveSharedLinks(!isActiveSharedLinks)}/>
+                        <div style={{position: "absolute", right: "35%", top: "100%"}}>
+                            {isActiveSharedLinks ? <ShareLinks/> : ''}
+                        </div>
+                    </SharedDiv>
+                    <CardContext>
+                        <ImageCard>
+                            <StaticImage src={'../../images/bg_card.png'} alt={'bg_card'}/>
+                        </ImageCard>
+                        <ImageCardDesc>
+                            <h3>What is shown in the picture?</h3>
+                            <p>Attempt cost:
+                                <span>
+                                    {item.price_coin}
+                                </span>
+                            </p>
+                            <p>Attempt made:
+                                <span>
+                                    {item.attempts_made}
+                                </span>
+                            </p>
+                        </ImageCardDesc>
+                    </CardContext>
+                    <div style={{display: 'flex', flexWrap: "wrap"}}>
+                                <div style={{margin: "1.6rem"}}>
+                                    <InputKeyWord/>
+                                    <InputKeyWord/>
+                                    <InputKeyWord/>
+                                    <InputKeyWord/>
+                                </div>
+                                <div style={{margin: "1.6rem"}}>
+                                    <InputKeyWord/>
+                                    <InputKeyWord/>
+                                </div>
+                                <div style={{margin: "1.6rem"}}>
+                                    <InputKeyWord/>
+                                    <InputKeyWord/>
+                                    <InputKeyWord/>
+                                    <InputKeyWord/>
+                                    <InputKeyWord/>
+                                </div>
+                    </div>
+                </Card>
+            </motion.div>
             ))}
         </>
     )

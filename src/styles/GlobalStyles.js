@@ -24,6 +24,7 @@ const GlobalStyled = createGlobalStyle`
     word-break: break-word;
     font-size: 10px;
     background-color: var(--white);
+    scroll-behavior: smooth;
     &::selection {
       background: var(--darkpurple);
       color: white;

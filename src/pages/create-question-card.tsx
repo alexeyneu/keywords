@@ -8,11 +8,7 @@ import {Input} from "../components/UI/Input/Input";
 import {ActionButton} from "../components/UI/Buttons/Buttons";
 import {LayoutQuestionCard} from "../components/LayoutQuestionCard/LayoutQuestonCard";
 import {StaticImage} from "gatsby-plugin-image";
-import {ModalsBackground} from "../modals/modals-background";
-import {CreatedWordModal} from "../modals/CreatedWordModal/CreatedWordModal";
-import {WalletMessageModal} from "../modals/WalletMessageModal/WalletMessageModal";
-import {ChangeNetWork} from "../modals/ChangeNetWork/ChangeNetWork";
-import {KeyWordModal} from "../modals/KeyWordModal/KeyWordModal";
+import {motion} from "framer-motion";
 
 const ContentCreateWord = styled.div`
   display: flex;
@@ -39,6 +35,11 @@ const Inputs = styled.div`
     
     margin-bottom: 4.8rem;
   
+  @media(max-width: 560px){
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
       div{
         p{
           font-weight: 600;
@@ -60,6 +61,12 @@ const GeneratedPicture = styled.div`
 
 const CreateQuestionCard = () => {
     return(
+        <motion.div
+            initial={{opacity: "0", y: "-1500px"}}
+            animate={{opacity: "1", y: '0'}}
+            exit={{opacity: "0", y: "-1500px"}}
+            transition={{type: 'spring', duraction: 1.5, bounce: 0.3}}
+        >
         <main>
             <Header/>
             <Container>
@@ -112,10 +119,8 @@ const CreateQuestionCard = () => {
                 <Footer/>
             </Container>
             <GlobalStyled/>
-            <ModalsBackground>
-                <KeyWordModal/>
-            </ModalsBackground>
         </main>
+            </motion.div>
     )
 }
 

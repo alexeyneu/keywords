@@ -1,8 +1,8 @@
 import * as React from 'react';
-import mainIMG from '../../images/man.png';
 import {Container} from "../Container/Container";
 import styled from "styled-components";
 import {StaticImage} from "gatsby-plugin-image";
+import {motion} from "framer-motion";
 
 const mainImgStyle = {
     width: '67rem',
