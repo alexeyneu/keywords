@@ -95,7 +95,7 @@ export const HeaderMobile:React.FC<Props> = (style) => {
 
     const bodyEl: React.ReactNode | null = document.querySelector('body');
 
-    if(isActiveSideBar) bodyEl.style.overflow = 'hidden';
+    isActiveSideBar ? bodyEl.style.overflow = 'hidden' : bodyEl.style.overflow = 'scroll'
 
     return(
         <>

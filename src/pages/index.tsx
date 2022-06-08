@@ -9,11 +9,9 @@ import {Footer} from "../components/Footer/Footer";
 import {QuestionCard} from "../components/QuestionCard/QuestionCard";
 import {AnimatePresence, motion} from "framer-motion";
 import {HeaderMobile} from "../components/Header/HeaderMobile";
-import {UseMatchMedia} from '../hooks/use-match-media';
 
 const IndexPage = () => {
 
-    const {isMobile} : any = UseMatchMedia();
   // @ts-ignore
     return (
       <motion.div
@@ -23,7 +21,10 @@ const IndexPage = () => {
           transition={{type: 'spring', duraction: 1.5, bounce: 0.3}}
       >
                 <main>
-                    {isMobile ? <HeaderMobile/> : <Header/>}
+                    { typeof window !== 'undefined'
+                        ? window.innerWidth <= 555 ? <HeaderMobile/> : <Header/>
+                        : ''
+                    }
                     <Container>
                         <KeywordBanner/>
                         <About/>

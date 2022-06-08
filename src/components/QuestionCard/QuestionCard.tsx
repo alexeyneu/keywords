@@ -71,7 +71,7 @@ const ButtonsAction = styled.div`
   }
 
   @media(max-width: 577px){
-    top: 48rem;
+    top: 52rem;
     left: 5rem;
   }
 `
@@ -88,6 +88,10 @@ const PriceCardDiv = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  
+  @media(max-width: 555px){
+    display: none;
+  }
 
   @media(max-width: 755px){
     left: 0;
@@ -140,6 +144,10 @@ const SharedDiv = styled.div`
   right: 5rem;
   bottom: 2rem;
 
+  @media(max-width: 555px){
+    top: 3rem;
+    z-index: 10;
+  }
 `
 
 const ImageCardDesc = styled.div`
@@ -188,13 +196,20 @@ export const QuestionCard = () => {
                         {item.id}
                     </IdCardDiv>
                     <PriceCardDiv>
-                        <p>Prize:
-                            <span>
+                    { typeof window !== 'undefined' ? window.innerWidth <= 555 ?
+                            ''
+                            :
+                             <>
+                                <p>Prize:
+                                    <span>
                                 {item.price_coin}
-                                <img style={{width: "2.4rem", height: "4rem"}} src={ETH} alt="eth"/>
+                                        <img style={{width: "2.4rem", height: "4rem"}} src={ETH} alt="eth"/>
                             </span>
-                        </p>
-                        <span>({item.price_currency}$)</span>
+                                </p>
+                                <span>({item.price_currency}$)</span>
+                            </>
+                        : null
+                    }
                     </PriceCardDiv>
                     <ButtonsAction>
                         <Guess>
@@ -221,6 +236,15 @@ export const QuestionCard = () => {
                                     {item.attempts_made}
                                 </span>
                             </p>
+                            { typeof window !== 'undefined'
+                                ? window.innerWidth <= 555 ?
+                                    <p>Prize:
+                                        <span>{item.price_coin}</span>  ({item.price_currency}$)
+                                    </p>
+                                    :
+                                    ''
+                                : null
+                            }
                         </ImageCardDesc>
                     </CardContext>
                     <div style={{display: 'flex', flexWrap: "wrap"}}>

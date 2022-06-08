@@ -37,6 +37,10 @@ export const ModalsBackground:React.FC<Props> = ({children}) => {
 
     const [isActiveModal, setIsActiveModal] = useState(true);
 
+    const bodyEl: React.ReactNode | null = document.querySelector('body');
+
+    isActiveModal ? bodyEl.style.overflow = 'hidden' : bodyEl.style.overflow = 'scroll'
+
     return(
         <>
         { isActiveModal ?

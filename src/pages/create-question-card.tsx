@@ -10,7 +10,6 @@ import {LayoutQuestionCard} from "../components/LayoutQuestionCard/LayoutQueston
 import {StaticImage} from "gatsby-plugin-image";
 import {motion} from "framer-motion";
 import BG_LIGHT_GROUP from '../images/group-light-bg.png';
-import {UseMatchMedia} from '../hooks/use-match-media';
 import {HeaderMobile} from "../components/Header/HeaderMobile";
 
 const ContentCreateWord = styled.div`
@@ -63,7 +62,6 @@ const GeneratedPicture = styled.div`
 `
 
 const CreateQuestionCard = () => {
-    const {isMobile} : any = UseMatchMedia();
     return(
         <motion.div
             initial={{opacity: "0", y: "-1500px"}}
@@ -72,7 +70,10 @@ const CreateQuestionCard = () => {
             transition={{type: 'spring', duraction: 1.5, bounce: 0.3}}
         >
         <main style={{position: 'relative'}}>
-            {isMobile ? <HeaderMobile/> : <Header/>}
+            { typeof window !== 'undefined'
+                ? window.innerWidth <= 555 ? <HeaderMobile/> : <Header/>
+                : null
+            }
             <Container>
                 <h1 style={{textAlign: "center", fontSize: "3.2rem", margin: '3rem 0 7.2rem 0'}}>Create a keyword</h1>
                 <img

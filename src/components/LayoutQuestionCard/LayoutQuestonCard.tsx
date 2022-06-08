@@ -4,9 +4,11 @@ import {StaticImage} from "gatsby-plugin-image";
 import {InputKeyWord} from "../UI/InputKeyWord/InputKeyWord";
 import {Guess} from "../UI/Buttons/Buttons";
 import {ShareButton} from "../ShareButton/ShareButton";
-import {useState} from "react";
-import {ShareLinks} from "../ShareLinks/ShareLinks";
-import {motion} from "framer-motion";
+import ETH from "../../images/eth.png";
+
+const dataQuestionCard = [
+    {id: '1', img: '../../images/bg_card.png', price_coin: '0,01', price_currency: '200', attempts_made: '10'},
+]
 
 const CardContext = styled.div`
   display: flex;
@@ -67,7 +69,7 @@ const ButtonsAction = styled.div`
   }
 
   @media(max-width: 577px){
-    top: 48rem;
+    top: 52rem;
     left: 5rem;
   }
 `
@@ -84,6 +86,10 @@ const PriceCardDiv = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  @media(max-width: 555px){
+    display: none;
+  }
 
   @media(max-width: 755px){
     left: 0;
@@ -136,6 +142,10 @@ const SharedDiv = styled.div`
   right: 5rem;
   bottom: 2rem;
 
+  @media(max-width: 555px){
+    top: 3rem;
+    z-index: 10;
+  }
 `
 
 const ImageCardDesc = styled.div`
@@ -166,7 +176,7 @@ const ImageCardDesc = styled.div`
       display: flex;
       align-items: center;
       margin-left: 1.2rem;
-
+      
       img{
         margin-left: 0.8rem;
       }
@@ -176,21 +186,28 @@ const ImageCardDesc = styled.div`
 
 export const LayoutQuestionCard = () => {
 
-    const [isActiveSharedLinks, setIsActiveSharedLinks] = useState(false);
-
     return(
         <>
+            {dataQuestionCard.map(item => (
                 <Card>
                     <IdCardDiv className="id-card">
-                        1
+                        {item.id}
                     </IdCardDiv>
                     <PriceCardDiv>
-                        <p>Prize:
-                            <span>
-                            0,0001
-                        </span>
-                        </p>
-                        <span>(200$)</span>
+                        { typeof window !== 'undefined' ? window.innerWidth <= 555 ?
+                                ''
+                                :
+                                <>
+                                    <p>Prize:
+                                        <span>
+                                {item.price_coin}
+                                            <img style={{width: "2.4rem", height: "4rem"}} src={ETH} alt="eth"/>
+                            </span>
+                                    </p>
+                                    <span>({item.price_currency}$)</span>
+                                </>
+                            : null
+                        }
                     </PriceCardDiv>
                     <ButtonsAction>
                         <Guess>
@@ -198,10 +215,7 @@ export const LayoutQuestionCard = () => {
                         </Guess>
                     </ButtonsAction>
                     <SharedDiv>
-                        <ShareButton onClick={() => setIsActiveSharedLinks(!isActiveSharedLinks)}/>
-                        <div style={{position: "absolute", right: "35%", top: "100%"}}>
-                            {isActiveSharedLinks ? <ShareLinks/> : ''}
-                        </div>
+                        <ShareButton/>
                     </SharedDiv>
                     <CardContext>
                         <ImageCard>
@@ -211,14 +225,24 @@ export const LayoutQuestionCard = () => {
                             <h3>What is shown in the picture?</h3>
                             <p>Attempt cost:
                                 <span>
-                                0,0001
-                            </span>
+                                    {item.price_coin}
+                                    <img style={{width: "1.8rem", height: "3rem"}} src={ETH} alt="eth"/>
+                                </span>
                             </p>
                             <p>Attempt made:
                                 <span>
-                                10
-                            </span>
+                                    {item.attempts_made}
+                                </span>
                             </p>
+                            { typeof window !== 'undefined'
+                                ? window.innerWidth <= 555 ?
+                                    <p>Prize:
+                                        <span>{item.price_coin}</span>  ({item.price_currency}$)
+                                    </p>
+                                    :
+                                    ''
+                                : null
+                            }
                         </ImageCardDesc>
                     </CardContext>
                     <div style={{display: 'flex', flexWrap: "wrap"}}>
@@ -241,6 +265,7 @@ export const LayoutQuestionCard = () => {
                         </div>
                     </div>
                 </Card>
+            ))}
         </>
     )
 }
