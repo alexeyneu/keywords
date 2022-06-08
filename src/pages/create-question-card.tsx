@@ -5,10 +5,13 @@ import {Footer} from "../components/Footer/Footer";
 import {Container} from "../components/Container/Container";
 import styled from "styled-components";
 import {Input} from "../components/UI/Input/Input";
-import {ActionButton} from "../components/UI/Buttons/Buttons";
+import {ActionButton, Guess} from "../components/UI/Buttons/Buttons";
 import {LayoutQuestionCard} from "../components/LayoutQuestionCard/LayoutQuestonCard";
 import {StaticImage} from "gatsby-plugin-image";
 import {motion} from "framer-motion";
+import BG_LIGHT_GROUP from '../images/group-light-bg.png';
+import {UseMatchMedia} from '../hooks/use-match-media';
+import {HeaderMobile} from "../components/Header/HeaderMobile";
 
 const ContentCreateWord = styled.div`
   display: flex;
@@ -60,6 +63,7 @@ const GeneratedPicture = styled.div`
 `
 
 const CreateQuestionCard = () => {
+    const {isMobile} : any = UseMatchMedia();
     return(
         <motion.div
             initial={{opacity: "0", y: "-1500px"}}
@@ -67,10 +71,15 @@ const CreateQuestionCard = () => {
             exit={{opacity: "0", y: "-1500px"}}
             transition={{type: 'spring', duraction: 1.5, bounce: 0.3}}
         >
-        <main>
-            <Header/>
+        <main style={{position: 'relative'}}>
+            {isMobile ? <HeaderMobile/> : <Header/>}
             <Container>
                 <h1 style={{textAlign: "center", fontSize: "3.2rem", margin: '3rem 0 7.2rem 0'}}>Create a keyword</h1>
+                <img
+                    style={{position: "absolute", zIndex: '-1', top: '10%', right: "0", width: "1200px"}}
+                    src={BG_LIGHT_GROUP}
+                    alt="Group Light"
+                />
                 <ContentCreateWord>
                     <StepsCreateWord>
                         <div style={{maxWidth: "57rem"}}>
@@ -112,9 +121,14 @@ const CreateQuestionCard = () => {
                         <StaticImage src={'../images/bg_card.png'} alt={'generate-img'}/>
                     </GeneratedPicture>
                 </ContentCreateWord>
-                <div style={{margin: "7.2rem 0"}}>
+                <div style={{margin: "0 0"}}>
                     <h4 style={{marginBottom: "2.4rem"}}>3. Preview</h4>
                     <LayoutQuestionCard/>
+                </div>
+                <div style={{textAlign: "center"}}>
+                    <Guess>
+                        Publish
+                    </Guess>
                 </div>
                 <Footer/>
             </Container>

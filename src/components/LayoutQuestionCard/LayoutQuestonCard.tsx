@@ -30,6 +30,7 @@ const Card = styled.div`
   border-radius: 2.4rem;
   padding: 3.6rem 3.6rem 3.6rem 9.5rem;
   margin: 5rem 0;
+  background-color: #fff;
 
   @media(max-width: 755px){
     border-bottom-left-radius: 0;
@@ -90,12 +91,22 @@ const PriceCardDiv = styled.div`
   }
 
   p {
-    font-size: 18px;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     span {
-      font-size: 26px;
-      font-weight: 500;
+      font-size: 2.6rem;
+      font-weight: 600;
       margin: 0 1rem;
+
+      display: flex;
+      align-items: center;
+
+      img{
+        margin-left: 0.8rem;
+      }
     }
   }
 
@@ -108,12 +119,12 @@ const PriceCardDiv = styled.div`
 `
 
 const ImageCard = styled.div`
-    max-width: 38.3rem;
-    width: 100%;
-    max-height: 20.7rem;
-    height: auto;
-    margin: 0 3.6rem 2.4rem 0;
-  
+  max-width: 38.3rem;
+  width: 100%;
+  max-height: 20.7rem;
+  height: auto;
+  margin: 0 3.6rem 2.4rem 0;
+
   img{
     width: 100%;
     height: 100%;
@@ -121,9 +132,9 @@ const ImageCard = styled.div`
 `
 
 const SharedDiv = styled.div`
-    position: absolute;
-    right: 5rem;
-    bottom: 2rem;
+  position: absolute;
+  right: 5rem;
+  bottom: 2rem;
 
 `
 
@@ -146,12 +157,20 @@ const ImageCardDesc = styled.div`
     align-items: center;
     justify-items: center;
     flex-wrap: wrap;
-    
-      span{
-        font-size: 20px;
-        color: #000000;
-        font-weight: 600;
+
+    span{
+      font-size: 20px;
+      color: #000000;
+      font-weight: 600;
+
+      display: flex;
+      align-items: center;
+      margin-left: 1.2rem;
+
+      img{
+        margin-left: 0.8rem;
       }
+    }
   }
 `
 
@@ -161,13 +180,6 @@ export const LayoutQuestionCard = () => {
 
     return(
         <>
-            <motion.div
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.7 }}
-                initial={{ opacity: 0, x: "-1000" }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-            >
                 <Card>
                     <IdCardDiv className="id-card">
                         1
@@ -229,7 +241,6 @@ export const LayoutQuestionCard = () => {
                         </div>
                     </div>
                 </Card>
-            </motion.div>
         </>
     )
 }

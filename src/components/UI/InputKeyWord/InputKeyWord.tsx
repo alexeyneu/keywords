@@ -20,6 +20,11 @@ const InputKey = styled.input`
 
 export const InputKeyWord:React.FC<Props> = ({value}) => {
     return(
-        <InputKey type="text" maxLength={1} value={value}/>
+        <InputKey
+            type="text"
+            maxLength={1}
+            value={value}
+            disabled={true}
+        />
     )
 }

@@ -97,6 +97,8 @@ const GlobalStyled = createGlobalStyle`
   main {
     flex-grow: 2;
     overflow-x: hidden;
+    max-width: 192rem;
+    margin: auto;
   }
 
   footer {

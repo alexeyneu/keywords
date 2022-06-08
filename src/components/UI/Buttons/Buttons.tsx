@@ -13,9 +13,9 @@ const EventButton = styled.button`
   border-radius: 4.6rem;
   font-size: 16px;
   color: #fff;
-  width: 21.4rem  /* 214/10 */  /* 214/16 */;
-  min-height: 5.2rem  /* 52/10 */;
-  font-weight: normal;
+  width: 21.4rem;
+  min-height: 5.2rem;
+  font-weight: 600;
 `;
 
 const DisconnectButton = styled.button`
@@ -24,8 +24,8 @@ const DisconnectButton = styled.button`
   border-radius: 4.6rem;
   font-size: 1.6rem;
   color: #000000;
-  width: 21.4rem /* 214/10 */ /* 214/16 */;
-  min-height: 5.2rem /* 52/10 */;
+  width: 21.4rem;
+  min-height: 5.2rem;
   font-weight: normal;
 `;
 
@@ -38,7 +38,7 @@ const WidthButton = styled.button`
   width: 21.4rem;
   min-height: 5.2rem;
   color: #000000;
-  font-weight: normal;
+  font-weight: 600;
   
 `;
 
@@ -67,7 +67,7 @@ const WidthDrawlButton: React.FC<Props> =
 
 const Guess: React.FC<Props> =
     ({children, onClick, props}) => {
-    return <GuessButton onClick={onClick}>{children}</GuessButton>
+    return<GuessButton onClick={onClick}>{children}</GuessButton>
 }
 
 const Disconnect: React.FC<Props> =

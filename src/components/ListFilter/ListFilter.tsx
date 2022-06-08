@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from "styled-components";
 import {useState} from "react";
+import {SortList} from "../SortList/SortList";
 
 export const ListFilter = () => {
 
@@ -8,6 +9,7 @@ export const ListFilter = () => {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        position: relative;
       
       @media (max-width: 527px){
         flex-direction: column;
@@ -16,7 +18,6 @@ export const ListFilter = () => {
     `
 
     const UlFilterList = styled.ul`
-      width: 100%;
       display: flex;
       @media (max-width: 527px){
         margin-bottom: 3rem;
@@ -56,6 +57,7 @@ export const ListFilter = () => {
         display: flex;
         align-items: center;
         cursor: pointer;
+        position: relative;
     `
 
     const [isActiveSortMenu, setIsActiveSortMenu] = useState(false);
@@ -75,6 +77,11 @@ export const ListFilter = () => {
                 <svg className={!isActiveSortMenu ? '' : 'active-arrow'} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M9.63508 17.442C9.327 17.8014 9.36863 18.3425 9.72805 18.6506C10.0875 18.9586 10.6286 18.917 10.9367 18.5576L16.0795 12.5576C16.3547 12.2366 16.3547 11.7629 16.0795 11.442L10.9367 5.44196C10.6286 5.08253 10.0875 5.04091 9.72805 5.34899C9.36863 5.65706 9.327 6.19818 9.63508 6.5576L14.2998 11.9998L9.63508 17.442Z" fill="black"/>
                 </svg>
+                <div style={{position: "absolute", top: "150%", right: "0", zIndex: "1"}}>
+                    {isActiveSortMenu ?
+                        <SortList/>
+                        : '' }
+                </div>
             </SortByDiv>
         </FilterContainer>
     )

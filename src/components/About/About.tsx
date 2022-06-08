@@ -9,21 +9,16 @@ export const About = () => {
     const DivFlex = styled.div`
         display: flex;
         align-items: center;
-        justify-content: space-between;
-      
-      @media(max-width: 937px){
-        flex-direction: column;
-        align-items: center;
         justify-content: center;
-      }
     `
 
     const TextDescriptionAbout = styled.div`
-        max-width: 65.3rem;
+        width: 100%;
       
       h4{
         font-size: 3.2rem;
         margin: 0 0 5rem 0;
+        text-align: center;
       }
       p{
         line-height: 25px;
@@ -31,17 +26,9 @@ export const About = () => {
     `
 
     return(
-        <section style={{paddingBottom:"15rem"}}>
+        <section style={{paddingBottom:"15rem", position: "relative"}}>
+            <img style={{position: "absolute", left: "-25%", top: "-100%", zIndex: '-1', width: "1100px"}} src={'../../images/light.png'} alt={'light'}/>
                 <DivFlex>
-                    <img
-                        style={{
-                            maxWidth:"49.1rem",
-                            width:"100%",
-                            maxHeight: "39.6rem",
-                            height:"auto"}}
-                        src={aboutIMG}
-                        alt={'about'}
-                    />
                     <TextDescriptionAbout>
                         <h4>About</h4>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut

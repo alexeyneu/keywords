@@ -2,11 +2,15 @@ import * as React from 'react';
 import {Container} from "../Container/Container";
 import styled from "styled-components";
 import {StaticImage} from "gatsby-plugin-image";
-import {motion} from "framer-motion";
+import {useState} from "react";
+import {ModalsBackground} from "../../modals/modals-background";
+import {VideoModal} from "../../modals/VideoModal/VideoModal";
 
 const mainImgStyle = {
-    width: '67rem',
-    height: '65.3rem',
+    maxWidth: '77rem',
+    width: "100%",
+    maxHeight: '65.3rem',
+    height: "100%",
     Position: 'relative',
 }
 
@@ -18,6 +22,10 @@ const HeaderH1 = styled.h1`
   text-transform: uppercase;
   font-family: "Arial Rounded Bold", sans-serif;
   letter-spacing: 10px;
+  
+  @media(max-width: 570px){
+    font-size: 5rem;
+  }
 `
 
 const HeaderDescription = styled.p`
@@ -31,6 +39,10 @@ const HeaderDescription = styled.p`
       span{
         color: #7857F9;
       }
+
+  @media(max-width: 570px){
+    font-size: 2rem;
+  }
 `
 
 const DivFlex = styled.div`
@@ -39,22 +51,68 @@ const DivFlex = styled.div`
     justify-content: flex-end;
   
     position: relative;
+    padding-bottom: 10rem;
+
+  @media(max-width: 556px){
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+`
+
+const PlayVideo = styled.button`
+    width: 100px;
+    height: 100px;
+    background-color: #6A34FF;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    border: none;
+    font-size: 5rem;
+    color: #fff;
+    margin: 0 auto;
+`
+
+const HeaderText = styled.div`
+    margin-top: 7.5rem;
+    position: absolute;,
+    top: 0;
+    left: 0;
+    z-index: 1;
+  
+  @media(max-width: 556px){
+    position: inherit;
+  }
 `
 
 export const KeywordBanner = () => {
+
+    const [isActiveVideo, setIsActiveVideo] = useState(false);
+
     return(
-        <section style={{padding:"100px 0"}}>
+        <section style={{padding:"50px 0"}}>
             <Container>
                 <DivFlex>
-                    <div style={{marginTop:"7.5rem", position:"absolute", top:'0', left:"2rem", zIndex:"1"}}>
+                    <HeaderText>
                         <HeaderH1>keywords</HeaderH1>
                         <HeaderDescription>blockchain <span>game</span></HeaderDescription>
-                    </div>
+                        <PlayVideo onClick={() => setIsActiveVideo(!isActiveVideo)}>
+                            ▶
+                        </PlayVideo>
+                    </HeaderText>
                     <div>
                         <StaticImage style={mainImgStyle} src={'../../images/man.png'} alt={'main_img'}/>
                     </div>
                 </DivFlex>
             </Container>
+            { isActiveVideo ?
+                <ModalsBackground>
+                    <br/>
+                    <VideoModal/>
+                </ModalsBackground>
+                : '' }
         </section>
     );
 }

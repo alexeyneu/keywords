@@ -1,13 +1,10 @@
 import * as React from 'react';
 import styled from "styled-components";
-import {GatsbyImage, StaticImage} from "gatsby-plugin-image";
-import BG_CARD from '../../images/bg_card.png'
+import {StaticImage} from "gatsby-plugin-image";
 import {InputKeyWord} from "../UI/InputKeyWord/InputKeyWord";
 import {Guess} from "../UI/Buttons/Buttons";
 import {ShareButton} from "../ShareButton/ShareButton";
-import {useState} from "react";
-import {ShareLinks} from "../ShareLinks/ShareLinks";
-import {motion} from "framer-motion";
+import ETH from '../../images/eth.png';
 
 const dataQuestionCard = [
     {id: '1', img: '../../images/bg_card.png', price_coin: '0,01', price_currency: '200', attempts_made: '10'},
@@ -37,6 +34,7 @@ const Card = styled.div`
   border-radius: 2.4rem;
   padding: 3.6rem 3.6rem 3.6rem 9.5rem;
   margin: 5rem 0;
+  background-color: #fff;
 
   @media(max-width: 755px){
     border-bottom-left-radius: 0;
@@ -97,12 +95,22 @@ const PriceCardDiv = styled.div`
   }
 
   p {
-    font-size: 18px;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     span {
-      font-size: 26px;
-      font-weight: 500;
+      font-size: 2.6rem;
+      font-weight: 600;
       margin: 0 1rem;
+      
+      display: flex;
+      align-items: center;
+      
+      img{
+        margin-left: 0.8rem;
+      }
     }
   }
 
@@ -158,24 +166,23 @@ const ImageCardDesc = styled.div`
       font-size: 20px;
       color: #000000;
       font-weight: 600;
+
+      display: flex;
+      align-items: center;
+      margin-left: 1.2rem;
+      
+      img{
+        margin-left: 0.8rem;
+      }
     }
   }
 `
 
 export const QuestionCard = () => {
 
-    const [isActiveSharedLinks, setIsActiveSharedLinks] = useState(false);
-
     return(
         <>
         {dataQuestionCard.map(item => (
-            <motion.div
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.7 }}
-                initial={{ opacity: 0, x: "-1000" }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-            >
                 <Card>
                     <IdCardDiv className="id-card">
                         {item.id}
@@ -184,6 +191,7 @@ export const QuestionCard = () => {
                         <p>Prize:
                             <span>
                                 {item.price_coin}
+                                <img style={{width: "2.4rem", height: "4rem"}} src={ETH} alt="eth"/>
                             </span>
                         </p>
                         <span>({item.price_currency}$)</span>
@@ -194,10 +202,7 @@ export const QuestionCard = () => {
                         </Guess>
                     </ButtonsAction>
                     <SharedDiv>
-                        <ShareButton onClick={() => setIsActiveSharedLinks(!isActiveSharedLinks)}/>
-                        <div style={{position: "absolute", right: "35%", top: "100%"}}>
-                            {isActiveSharedLinks ? <ShareLinks/> : ''}
-                        </div>
+                        <ShareButton/>
                     </SharedDiv>
                     <CardContext>
                         <ImageCard>
@@ -208,6 +213,7 @@ export const QuestionCard = () => {
                             <p>Attempt cost:
                                 <span>
                                     {item.price_coin}
+                                    <img style={{width: "1.8rem", height: "3rem"}} src={ETH} alt="eth"/>
                                 </span>
                             </p>
                             <p>Attempt made:
@@ -237,7 +243,6 @@ export const QuestionCard = () => {
                                 </div>
                     </div>
                 </Card>
-            </motion.div>
             ))}
         </>
     )

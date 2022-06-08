@@ -37,6 +37,10 @@ export const Header = () => {
     const Header = styled.header`
         padding: 4.2rem 0;
         position: relative;
+      
+      @media(max-width: 560px){
+        padding: 2.2rem 0 1rem 0;
+      }
     `;
 
     const BgLightStatic = styled.img`
@@ -84,6 +88,11 @@ export const Header = () => {
     return(
         <Header>
             <BgLightStatic src={BG_LIGHT} alt={'bg-light'}/>
+            <StaticImage
+                style={{position: "absolute", left: "9%", top: "180%", width: "22.6rem"}}
+                src={'../../images/group-cubes.png'}
+                alt={'group-cube'}
+            />
             <Container>
                 <DivFlex>
                     <TitleHeader>{TITLE_HEADER}</TitleHeader>
