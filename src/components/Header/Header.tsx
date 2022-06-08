@@ -4,10 +4,8 @@ import {Container} from "../Container/Container";
 import {ActionButton, WidthDrawlButton} from "../UI/Buttons/Buttons";
 import {CircleIconButton} from "../UI/CircleIconButton/CircleIconButton";
 import {StaticImage} from "gatsby-plugin-image";
-import BG_LIGHT from '../../images/light-bg.png'
-import {KeywordBanner} from "../KeywordBanner/KeywordBanner";
-import {About} from "../About/About";
-import {ListFilter} from "../ListFilter/ListFilter";
+import BG_LIGHT from '../../images/light-bg.png';
+import GroupsCube from '../../images/group-cubes.png';
 
 
 export const Header = () => {
@@ -88,9 +86,9 @@ export const Header = () => {
     return(
         <Header>
             <BgLightStatic src={BG_LIGHT} alt={'bg-light'}/>
-            <StaticImage
+            <img
                 style={{position: "absolute", left: "9%", top: "180%", width: "22.6rem"}}
-                src={'../../images/group-cubes.png'}
+                src={GroupsCube}
                 alt={'group-cube'}
             />
             <Container>

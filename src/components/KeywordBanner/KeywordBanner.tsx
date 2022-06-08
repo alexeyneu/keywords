@@ -1,18 +1,24 @@
 import * as React from 'react';
 import {Container} from "../Container/Container";
 import styled from "styled-components";
-import {StaticImage} from "gatsby-plugin-image";
 import {useState} from "react";
 import {ModalsBackground} from "../../modals/modals-background";
 import {VideoModal} from "../../modals/VideoModal/VideoModal";
+import Man from '../../images/man.png';
 
-const mainImgStyle = {
-    maxWidth: '77rem',
-    width: "100%",
-    maxHeight: '65.3rem',
-    height: "100%",
-    Position: 'relative',
-}
+const ImgMan = styled.img`
+    max-width: 80rem;
+    width: 100%;
+    max-height: 65.3rem;
+    height: 100%;
+    position: relative;
+  margin-left: 40rem;
+  
+  @media(max-width: 555px){
+    width: 60rem;
+    margin-left: 0;
+  }
+`
 
 const HeaderH1 = styled.h1`
   font-size: 8.5rem;
@@ -57,6 +63,7 @@ const DivFlex = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    
   }
 `
 
@@ -70,7 +77,7 @@ const PlayVideo = styled.button`
     justify-content: center;
     border-radius: 100%;
     border: none;
-    font-size: 5rem;
+    font-size: 4rem;
     color: #fff;
     margin: 0 auto;
 `
@@ -103,7 +110,7 @@ export const KeywordBanner = () => {
                         </PlayVideo>
                     </HeaderText>
                     <div>
-                        <StaticImage style={mainImgStyle} src={'../../images/man.png'} alt={'main_img'}/>
+                        <ImgMan src={Man} alt={'main_img'}/>
                     </div>
                 </DivFlex>
             </Container>

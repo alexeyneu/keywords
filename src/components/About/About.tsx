@@ -1,8 +1,6 @@
 import * as React from 'react';
 import styled from "styled-components";
-import {StaticImage} from "gatsby-plugin-image";
-import {Container} from "../Container/Container";
-import aboutIMG from '../../images/about.png';
+import Light from '../../images/light.png';
 
 export const About = () => {
 
@@ -27,7 +25,11 @@ export const About = () => {
 
     return(
         <section style={{paddingBottom:"15rem", position: "relative"}}>
-            <img style={{position: "absolute", left: "-25%", top: "-100%", zIndex: '-1', width: "1100px"}} src={'../../images/light.png'} alt={'light'}/>
+            <img
+                style={{position: "absolute", left: "-25%", top: "-100%", zIndex: '0', width: "1100px"}}
+                src={Light}
+                alt={'light'}
+            />
                 <DivFlex>
                     <TextDescriptionAbout>
                         <h4>About</h4>

@@ -42,7 +42,7 @@ export const HeaderMobile:React.FC<Props> = (style) => {
       height: 200vh;
       background-color: #fff;
       position: fixed;
-      top: 2.1%;
+      top: 1.5%;
       left: 0;
       z-index: 20;
       overflow: scroll;
@@ -69,7 +69,7 @@ export const HeaderMobile:React.FC<Props> = (style) => {
         position: absolute;
         height: 6rem;
         left: 10%;
-        bottom: -65vh;
+        bottom: -45vh;
         color: #fff !important;
         font-size: 2.4rem !important;
     `

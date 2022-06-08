@@ -9,6 +9,7 @@ const CreateWordMessage = styled.div`
     max-width: 96.7rem;
     width: 100%;
     margin: auto;
+    padding-top: 5rem;
   
   img{
     width: 371px;

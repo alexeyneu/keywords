@@ -17,8 +17,8 @@ const CircleButton = styled.button`
     border-radius: 100%;
   
   & picture,img,svg{
-    width: 2.4rem;
-    height: 1.9rem;
+    width: 2.4rem !important;
+    height: 1.9rem !important;
   }
 `
 

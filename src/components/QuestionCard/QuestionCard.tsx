@@ -37,7 +37,6 @@ const Card = styled.div`
   background-color: #fff;
 
   @media(max-width: 755px){
-    border-bottom-left-radius: 0;
     margin: 5rem 0 15rem 0;
   }
 

@@ -77,7 +77,7 @@ const CreateQuestionCard = () => {
             <Container>
                 <h1 style={{textAlign: "center", fontSize: "3.2rem", margin: '3rem 0 7.2rem 0'}}>Create a keyword</h1>
                 <img
-                    style={{position: "absolute", zIndex: '-1', top: '10%', right: "0", width: "1200px"}}
+                    style={{position: "absolute", zIndex: '-1', top: '15%', right: "0", width: "100%"}}
                     src={BG_LIGHT_GROUP}
                     alt="Group Light"
                 />
@@ -127,9 +127,9 @@ const CreateQuestionCard = () => {
                     <LayoutQuestionCard/>
                 </div>
                 <div style={{textAlign: "center"}}>
-                    <Guess>
+                    <ActionButton>
                         Publish
-                    </Guess>
+                    </ActionButton>
                 </div>
                 <Footer/>
             </Container>
