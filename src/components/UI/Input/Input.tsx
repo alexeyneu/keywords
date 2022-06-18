@@ -1,13 +1,16 @@
 import * as React from 'react';
 import styled from "styled-components";
+import {Field} from 'formik'
 
 interface Props{
     placeholder: string
     style?: React.ReactNode | any
-    onChange?: React.ChangeEvent<HTMLInputElement> | any
+    onChange?: React.ChangeEvent<HTMLInputElement> | any,
+    name:string;
+    value:string;
 }
 
-const InputLayout = styled.input`
+const InputLayout = styled(Field)`
     width: 100%;
     height: 7rem;
     background: #ECECEC;
@@ -23,6 +26,12 @@ const InputLayout = styled.input`
       }
 `
 
-export const Input:React.FC<Props> = ({placeholder, style, onChange}) => {
-    return <InputLayout style={style} type="text" placeholder={placeholder} onChange={onChange}/>
+export const Input:React.FC<Props> = ({placeholder, style, name, value}) => {
+  return <InputLayout
+      name={name} 
+      value={value}
+      style={style} 
+      type="text" 
+      placeholder={placeholder}
+    />
 }

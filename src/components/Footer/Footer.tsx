@@ -89,12 +89,6 @@ export const Footer = () =>{
                     </svg>
                 </a>
             </SocialListDiv>
-            {isActiveCreateWord ? <ModalsBackground>
-                <KeyWordModal/>
-            </ModalsBackground> : ''}
-            {isWalletMessage ? <ModalsBackground>
-                <WalletMessageModal/>
-            </ModalsBackground> : ''}
         </FooterKey>
     )
 }
