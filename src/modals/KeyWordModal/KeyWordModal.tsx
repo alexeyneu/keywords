@@ -1,11 +1,8 @@
+import * as React from 'react';
 import styled from "styled-components";
 import {InputKeyWord} from "../../components/UI/InputKeyWord/InputKeyWord";
 import {Guess} from "../../components/UI/Buttons/Buttons";
-import { WordBlocks } from "../../components/QuestionCard/WordBlocks";
-import { useCallback, useState } from "react"
-import {useMoralis} from 'react-moralis'
-import {useGuess} from '../../hooks/guess'
-import {useNotification} from 'web3uikit'
+
 
 const CreateWordMessage = styled.div`
     max-width: 96.7rem;
@@ -29,93 +26,33 @@ const KeyWordWrapper = styled.div`
   }
 `
 
-interface props{
-    id: string;
-    img: string;
-    wordbroken: string;
-    attempt_price: string;
-    prize: number;
-};
-
-export const KeyWordModal = ({id, img, wordbroken, attempt_price, prize}: props) => {
-    const {chainId, isWeb3Enabled} = useMoralis()
-    const [wordInput, setWordInput] = useState<string>('')
-    const dispatchNotification = useNotification();
-    const guess = useGuess(id, prize, dispatchNotification)
-
-    const onChange = (e:any, isWhitespace:boolean, countInp:number) => {
-        
-        if(e.target.value === '') {
-            let str: string | string[] = wordInput.split('')
-            str.splice(countInp, 1)
-            str = str.join('')
-            setWordInput(str)
-            return;
-        }
-        let strFirst = wordInput.slice(0,countInp); 
-        let strLast = wordInput.slice(countInp);
-
-        // console.log(strFirst + `${isWhitespace ? ' ' : ''}` + e.target.value + strLast)
-		setWordInput(strFirst + `${isWhitespace ? ' ' : ''}` + e.target.value + strLast)
-	}
-
-    const submit = useCallback(async () => {
-        if(!isWeb3Enabled) {
-            dispatchNotification({
-                type: 'error',
-                message: 'Connect a wallet',
-                title: 'Error',
-                icon: "info",
-                position:'topR',
-            });
-            return
-        }
-
-        if(chainId !== '0x4') { // rinkeby
-            dispatchNotification({
-                type: 'error',
-                message: 'Switch to the rinkeby network',
-                title: 'Error',
-                icon: "info",
-                position:'topR',
-            });
-            return
-        }
-
-        if(wordInput.length === 0) {
-            dispatchNotification({
-                type: 'error',
-                message: 'Fill in the words field',
-                title: 'Error',
-                icon: "info",
-                position:'topR',
-            });
-            return
-        }
-
-        await guess(String(id), Number(attempt_price), wordInput)
-    }, [
-        wordInput, 
-        isWeb3Enabled, 
-        chainId, 
-        attempt_price, 
-        dispatchNotification, 
-        guess, 
-        id, 
-        prize
-    ])
-
+export const KeyWordModal = () => {
     return(
         <CreateWordMessage>
-            <img src={img} alt={''}/>
+            <img src={'../../images/bg_card.png'} alt={''}/>
             <KeyWordWrapper>
-                <WordBlocks 
-                    onChange={onChange} 
-                    disabled={false} 
-                    wordbroken={wordbroken} 
-                />
-                
-                <Guess onClick={submit}>
+                <div>
+                    <InputKeyWord value={'p'}/>
+                    <InputKeyWord value={'h'}/>
+                    <InputKeyWord value={'o'}/>
+                    <InputKeyWord value={'t'}/>
+                    <InputKeyWord value={'o'}/>
+                </div>
+                <div>
+                    <InputKeyWord value={'w'}/>
+                    <InputKeyWord value={'i'}/>
+                    <InputKeyWord value={'t'}/>
+                    <InputKeyWord value={'h'}/>
+                </div>
+                <div>
+                    <InputKeyWord value={'f'}/>
+                    <InputKeyWord value={'a'}/>
+                    <InputKeyWord value={'m'}/>
+                    <InputKeyWord value={'i'}/>
+                    <InputKeyWord value={'l'}/>
+                    <InputKeyWord value={'y'}/>
+                </div>
+                <Guess>
                     Guess
                 </Guess>
             </KeyWordWrapper>

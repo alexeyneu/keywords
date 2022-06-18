@@ -5,7 +5,6 @@ interface Props{
     onClick?: React.ReactNode | any;
     props?: React.ReactNode;
     children?: React.ReactNode
-    type?: string | any;
 }
 
 const EventButton = styled.button`
@@ -57,8 +56,8 @@ const GuessButton = styled.button`
 `
 
 const ActionButton: React.FC<Props> =
-    ({children, onClick, type}) => {
-    return<EventButton type={type} onClick={onClick}>{children}</EventButton>
+    ({children, onClick}) => {
+    return<EventButton onClick={onClick}>{children}</EventButton>
 }
 
 
