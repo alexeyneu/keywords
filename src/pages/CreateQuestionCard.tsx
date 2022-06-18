@@ -299,6 +299,8 @@ const CreateQuestionCard:React.FC<props> = () => {
         });
   
         const metaUrl:any = await fileMeta.saveIPFS()
+        console.log(metaUrl._ipfs)
+        console.log(metaUrl._ipfs.replace(`"`, ''))
   
         const questionsMint ={ 
            word:values.Word,
@@ -461,20 +463,10 @@ const CreateQuestionCard:React.FC<props> = () => {
                                     />
                                 </div>
                             }
-
-                            <div style={{textAlign: "center"}}>         
-                            {(
-                                status === "Image generation" || 
-                                status === "Creating a question" ||
-                                status === "Sending ethereum"
-                            ) ?
-                                
-                                <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
-                                :
+                            <div style={{textAlign: "center"}}>
                                 <ActionButton type="submit">
                                     Publish
                                 </ActionButton>
-                            }
                             </div>
                         </Form>
                     )}
