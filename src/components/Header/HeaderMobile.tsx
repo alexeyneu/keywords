@@ -1,13 +1,8 @@
 import * as React from 'react';
 import styled from "styled-components";
 import {Container} from "../Container/Container";
-// import {motion} from "framer-motion";
-import {WalletModal } from 'web3uikit'
-import {useState, useEffect} from "react";
-import {useCheckBalance} from '../../hooks/withdrawal/checkBalance'
-import {useWithdrawPayments} from '../../hooks/withdrawal/withdrawPayments'
-import {useMoralis} from "react-moralis";
-import { Link } from "react-router-dom";
+import {useState} from "react";
+import {motion} from "framer-motion";
 
 interface Props {
     style?: React.ReactNode | null
@@ -97,22 +92,6 @@ export const HeaderMobile:React.FC<Props> = (style) => {
     `
 
     const [isActiveSideBar, setIsActiveSideBar] = useState(false);
-    const [isModal, setIsModal] = useState(false);
-    const setModal = () => {
-      setIsModal(!isModal)
-    }
-
-    const [isPayments, setIsPayments] = useState<boolean>(false)
-    const {isAuthenticated, isWeb3Enabled, authenticate} = useMoralis();
-    const balance = useCheckBalance()
-    const payments = useWithdrawPayments()
-
-    useEffect(() => {
-      if(isPayments) {
-        payments()
-        setIsPayments(false)
-      }
-   }, [isPayments, payments])
 
     const bodyEl: HTMLBodyElement | null | any = document.querySelector('body');
 
@@ -120,20 +99,10 @@ export const HeaderMobile:React.FC<Props> = (style) => {
 
     return(
         <>
-        <WalletModal 
-          isOpened={isModal}
-          setIsOpened={setModal}
-          chainId={4} // rinkeby
-          moralisAuth
-          signingMessage=""
-        />
         <Header>
             <Container>
                 <DivFlex>
-                  <Link to='/'>
                     <TitleHeader>{TITLE_HEADER}</TitleHeader>
-                  </Link>
-                  
                     <IconNav onClick={() => setIsActiveSideBar(!isActiveSideBar)}>
                         {isActiveSideBar ?
                             <p
@@ -159,28 +128,18 @@ export const HeaderMobile:React.FC<Props> = (style) => {
         </Header>
             {isActiveSideBar ?
                     <ContentSideBar>
-                        {/* <motion.div
+                        <motion.div
                             initial={{opacity: "0", y: "-1500px"}}
                             animate={{opacity: "1", y: '0'}}
                             exit={{opacity: "0", y: "-1500px"}}
-                        > */}
+                        >
                         <Container>
-                            <p>Balance: {balance} ETH</p>
-
-                            <Link to='/create-question-card'><button>Create keyword</button></Link>
-                            <button onClick={async () => {
-                              if(!isWeb3Enabled || !isAuthenticated) {
-                                await authenticate()
-                                setIsPayments(true)
-                              } else {
-                                setIsPayments(true)
-                              }
-                            }}>
-                              Withdraw Money
-                            </button>
+                            <p>Balance: 0,001 ETH</p>
+                            <p><button>Create keyword</button></p>
+                            <button>Withdraw Money</button>
                         </Container>
-                        <ConnectButton onClick={setModal}>Connect Wallet</ConnectButton>
-                        {/* </motion.div> */}
+                        <ConnectButton>Connect Wallet</ConnectButton>
+                        </motion.div>
                     </ContentSideBar>
             : '' }
     </>

@@ -1,13 +1,16 @@
+import * as React from 'react';
 import styled from "styled-components";
-
+import {InputKeyWord} from "../UI/InputKeyWord/InputKeyWord";
 import {Guess} from "../UI/Buttons/Buttons";
 import {ShareButton} from "../ShareButton/ShareButton";
 import ETH from '../../images/eth.png';
-import {useCallback, useEffect, useState} from 'react'
-import { WordBlocks } from "./WordBlocks";
-import {useMoralis} from "react-moralis";
-import { KeyWordModal } from "../../modals/KeyWordModal/KeyWordModal";
-import { ModalsBackground } from "../../modals/modals-background";
+import bgCard from '../../images/bg_card.png';
+
+const dataQuestionCard = [
+    {id: '1', img: '../../images/bg_card.png', price_coin: '0,01', price_currency: '200', attempts_made: '10'},
+    {id: '2', img: '../../images/bg_card.png', price_coin: '0,0001', price_currency: '400', attempts_made: '50'},
+    {id: '3', img: '../../images/bg_card.png', price_coin: '0,0005', price_currency: '600', attempts_made: '1'}
+]
 
 const CardContext = styled.div`
   display: flex;
@@ -182,46 +185,14 @@ const ImageCardDesc = styled.div`
   }
 `
 
-export const QuestionCard = ({question}: {question:any}) => {
-  const {Moralis} = useMoralis();
-  const [isModal, setisModal] = useState<false | number>(false);
-  const [ethPrice, setEthPrice] = useState<false | number>(false);
-
-  useEffect(() => {
-    const ethPriceUsd = async () => {
-      let priceEth:any = await fetch('https://api.binance.com/api/v3/avgPrice?symbol=ETHUSDT')
-      priceEth = await priceEth.json()
-
-      setEthPrice(Number(priceEth.price)) 
-    }
-
-    ethPriceUsd()
-  }, [])
-
-  const onModal = () =>{
-    setisModal(false)
-  }
+export const QuestionCard = () => {
 
     return(
         <>
-        {typeof isModal === 'number' && 
-          <ModalsBackground onClick={onModal}>
-            <KeyWordModal 
-              id={question[isModal].attributes.ID}
-              img={question[isModal].attributes.img}
-              wordbroken={question[isModal].attributes.wordbroken}
-              attempt_price={question[isModal].attributes.attempt_price}
-              prize={question[isModal].attributes.prize}
-            />
-          </ModalsBackground>
-        }
-
-        {ethPrice && question.map((item:any, index:number) => {
-          let prizeUsd = Number(item.attributes.prize * ethPrice).toFixed(3)
-          return(
-            <Card key={item.id}>
+        {dataQuestionCard.map(item => (
+                <Card>
                     <IdCardDiv className="id-card">
-                        {item.attributes.ID}
+                        {item.id}
                     </IdCardDiv>
                     <PriceCardDiv>
                     { typeof window !== 'undefined' ? window.innerWidth <= 555 ?
@@ -230,17 +201,17 @@ export const QuestionCard = ({question}: {question:any}) => {
                             <>
                                 <p>Prize:
                                     <span>
-                                {item.attributes.prize}
+                                {item.price_coin}
                                         <img style={{width: "2.4rem", height: "4rem"}} src={ETH} alt="eth"/>
                             </span>
                                 </p>
-                                <span>({prizeUsd}$)</span>
+                                <span>({item.price_currency}$)</span>
                             </>
                         : null
                     }
                     </PriceCardDiv>
                     <ButtonsAction>
-                        <Guess onClick={() => {setisModal(index)}}>
+                        <Guess>
                             Guess
                         </Guess>
                     </ButtonsAction>
@@ -249,25 +220,25 @@ export const QuestionCard = ({question}: {question:any}) => {
                     </SharedDiv>
                     <CardContext>
                         <ImageCard>
-                            <img src={item.attributes.img} alt={'bg_card'}/>
+                            <img src={bgCard} alt={'bg_card'}/>
                         </ImageCard>
                         <ImageCardDesc>
                             <h3>What is shown in the picture?</h3>
                             <p>Attempt cost:
                                 <span>
-                                    {Moralis.Units.FromWei(item.attributes.attempt_price)} {/* eth */}
+                                    {item.price_coin}
                                     <img style={{width: "1.8rem", height: "3rem"}} src={ETH} alt="eth"/>
                                 </span>
                             </p>
                             <p>Attempt made:
                                 <span>
-                                    {item.attributes.attempt}
+                                    {item.attempts_made}
                                 </span>
                             </p>
                             { typeof window !== 'undefined'
                                 ? window.innerWidth <= 555 ?
                                     <p>Prize:
-                                        <span>{item.attributes.prize}</span> ({prizeUsd})$
+                                        <span>{item.price_coin}</span>  ({item.price_currency}$)
                                     </p>
                                     :
                                     ''
@@ -276,12 +247,26 @@ export const QuestionCard = ({question}: {question:any}) => {
                         </ImageCardDesc>
                     </CardContext>
                     <div style={{display: 'flex', flexWrap: "wrap"}}>
-                        <WordBlocks wordbroken={item.attributes.wordbroken} />
+                                <div style={{margin: "1.6rem"}}>
+                                    <InputKeyWord/>
+                                    <InputKeyWord/>
+                                    <InputKeyWord/>
+                                    <InputKeyWord/>
+                                </div>
+                                <div style={{margin: "1.6rem"}}>
+                                    <InputKeyWord/>
+                                    <InputKeyWord/>
+                                </div>
+                                <div style={{margin: "1.6rem"}}>
+                                    <InputKeyWord/>
+                                    <InputKeyWord/>
+                                    <InputKeyWord/>
+                                    <InputKeyWord/>
+                                    <InputKeyWord/>
+                                </div>
                     </div>
                 </Card>
-          )
-        }
-        )}
+            ))}
         </>
     )
 }

@@ -5,7 +5,10 @@ import {Guess} from "../UI/Buttons/Buttons";
 import {ShareButton} from "../ShareButton/ShareButton";
 import ETH from "../../images/eth.png";
 import bgCard from '../../images/bg_card.png';
-import { WordBlocks } from '../QuestionCard/WordBlocks';
+
+const dataQuestionCard = [
+    {id: '1', img: '../../images/bg_card.png', price_coin: '0,01', price_currency: '200', attempts_made: '10'},
+]
 
 const CardContext = styled.div`
   display: flex;
@@ -181,34 +184,11 @@ const ImageCardDesc = styled.div`
   }
 `
 
-interface props{
-  id: string;
-  img:string;
-  price_coin:string;
-  price_currency:string;
-  attempts_made:string;
-  word:string;
-}
-
-export const LayoutQuestionCard = (props:props) => {
-    let itemsWord = [{...props}]
-
-    const Wordbroken = (word:string) => {
-      const wordsArr = word.split(' ')
-      const wordsNumber = wordsArr.length
-      let Wordbroken = `${wordsNumber}:`;
-      
-      for(let i in wordsArr) {
-         Wordbroken = Wordbroken + wordsArr[i].length + ','
-      }
-
-      return Wordbroken.slice(0, -1)
-    }
-    // console.log(Wordbroken('privet im'))
+export const LayoutQuestionCard = () => {
 
     return(
         <>
-            {itemsWord.map((item:any) => (
+            {dataQuestionCard.map(item => (
                 <Card>
                     <IdCardDiv className="id-card">
                         {item.id}
@@ -230,7 +210,7 @@ export const LayoutQuestionCard = (props:props) => {
                         }
                     </PriceCardDiv>
                     <ButtonsAction>
-                        <Guess type="button"> 
+                        <Guess>
                             Guess
                         </Guess>
                     </ButtonsAction>
@@ -266,7 +246,23 @@ export const LayoutQuestionCard = (props:props) => {
                         </ImageCardDesc>
                     </CardContext>
                     <div style={{display: 'flex', flexWrap: "wrap"}}>
-                      <WordBlocks wordbroken={Wordbroken(item.word)} />
+                        <div style={{margin: "1.6rem"}}>
+                            <InputKeyWord/>
+                            <InputKeyWord/>
+                            <InputKeyWord/>
+                            <InputKeyWord/>
+                        </div>
+                        <div style={{margin: "1.6rem"}}>
+                            <InputKeyWord/>
+                            <InputKeyWord/>
+                        </div>
+                        <div style={{margin: "1.6rem"}}>
+                            <InputKeyWord/>
+                            <InputKeyWord/>
+                            <InputKeyWord/>
+                            <InputKeyWord/>
+                            <InputKeyWord/>
+                        </div>
                     </div>
                 </Card>
             ))}

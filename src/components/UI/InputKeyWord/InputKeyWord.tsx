@@ -2,15 +2,10 @@ import * as React from 'react';
 import styled from "styled-components";
 
 interface Props{
-    value? : string,
-    margin : string;
-    disabled? : boolean;
-    onChange?:(e:any, isWhitespace:boolean, countInp:number) => void;
-    isWhitespace?: boolean;
-    countInp?:number;
+    value? : string
 }
 
-const InputKey = styled.input.attrs((props: {margin: string}) => props)`
+const InputKey = styled.input`
   width: 4rem;
   height: 4rem;
   background: #dcdcdc;
@@ -21,19 +16,15 @@ const InputKey = styled.input.attrs((props: {margin: string}) => props)`
   padding: 0 1.2rem;
   text-transform: uppercase;
   margin: 0 0.2rem;
-
-  margin-left:${props => props.margin};
 `
 
-export const InputKeyWord:React.FC<Props> = ({value, margin, disabled = true, onChange, isWhitespace = false, countInp = 0}) => {
+export const InputKeyWord:React.FC<Props> = ({value}) => {
     return(
         <InputKey
-            margin={margin}
             type="text"
             maxLength={1}
             value={value}
-            disabled={disabled}
-            onChange={(e:any) => onChange !== undefined && onChange(e, isWhitespace, countInp)}
+            disabled={true}
         />
     )
 }
