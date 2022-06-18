@@ -1,8 +1,14 @@
 import styled from "styled-components";
-import {useState} from "react";
+import {useState, useCallback} from "react";
 import {SortList} from "../SortList/SortList";
+import {filter} from '../../pages/HomePage'
 
-export const ListFilter = () => {
+export interface Props {
+  filter:filter;
+  setFilter:React.Dispatch<React.SetStateAction<filter>>;
+}
+
+export const ListFilter = ({filter, setFilter}: Props) => {
 
     const FilterContainer = styled.div`
         display: flex;
@@ -60,13 +66,21 @@ export const ListFilter = () => {
     `
 
     const [isActiveSortMenu, setIsActiveSortMenu] = useState(false);
+    const onFilter = useCallback((state:any) => () => {
+      setFilter((statePrev:filter) => {
+        return {
+          ...statePrev,
+           ...state,
+        }
+      })
+    }, [setFilter])
 
     return(
         <FilterContainer>
             <UlFilterList>
-                <li><a href="#">All</a></li>
-                <li><a href="#">My questions</a></li>
-                <li><a href="#">Solved</a></li>
+                <li>All</li>
+                <li onClick={onFilter({my:!filter.my})}>My questions</li>
+                <li onClick={onFilter({guessed:!filter.guessed})}>Solved</li>
             </UlFilterList>
             <SortByDiv onClick={() => setIsActiveSortMenu(!isActiveSortMenu)}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -78,7 +92,10 @@ export const ListFilter = () => {
                 </svg>
                 <div style={{position: "absolute", top: "150%", right: "0", zIndex: "1"}}>
                     {isActiveSortMenu ?
-                        <SortList/>
+                        <SortList 
+                          filter={filter}
+                          setFilter={setFilter}
+                        />
                         : '' }
                 </div>
             </SortByDiv>

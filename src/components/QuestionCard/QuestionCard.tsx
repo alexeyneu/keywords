@@ -1,16 +1,11 @@
-import * as React from 'react';
 import styled from "styled-components";
-import {InputKeyWord} from "../UI/InputKeyWord/InputKeyWord";
+
 import {Guess} from "../UI/Buttons/Buttons";
 import {ShareButton} from "../ShareButton/ShareButton";
 import ETH from '../../images/eth.png';
-import bgCard from '../../images/bg_card.png';
-
-const dataQuestionCard = [
-    {id: '1', img: '../../images/bg_card.png', price_coin: '0,01', price_currency: '200', attempts_made: '10'},
-    {id: '2', img: '../../images/bg_card.png', price_coin: '0,0001', price_currency: '400', attempts_made: '50'},
-    {id: '3', img: '../../images/bg_card.png', price_coin: '0,0005', price_currency: '600', attempts_made: '1'}
-]
+import {useCallback} from 'react'
+import { WordBlocks } from "./WordBlocks";
+import {useMoralis} from "react-moralis";
 
 const CardContext = styled.div`
   display: flex;
@@ -185,14 +180,24 @@ const ImageCardDesc = styled.div`
   }
 `
 
-export const QuestionCard = () => {
+export const QuestionCard = ({question}: {question:any}) => {
+  const {Moralis} = useMoralis();
+
+  const prizePriceUsd = useCallback(async (ethPrize: number) => {
+    let priceEth = await fetch('https://api.binance.com/api/v3/avgPrice?symbol=ETHUSDT');
+    let priceEthJson = await priceEth.json() 
+    
+    console.log(Number(priceEthJson.price) * ethPrize)
+    return Number(priceEthJson.price) * ethPrize
+  }, [])
 
     return(
         <>
-        {dataQuestionCard.map(item => (
-                <Card>
+        {question.map((item:any) => {
+          return(
+            <Card key={item.id}>
                     <IdCardDiv className="id-card">
-                        {item.id}
+                        {item.attributes.ID}
                     </IdCardDiv>
                     <PriceCardDiv>
                     { typeof window !== 'undefined' ? window.innerWidth <= 555 ?
@@ -201,11 +206,11 @@ export const QuestionCard = () => {
                             <>
                                 <p>Prize:
                                     <span>
-                                {item.price_coin}
+                                {item.attributes.prize}
                                         <img style={{width: "2.4rem", height: "4rem"}} src={ETH} alt="eth"/>
                             </span>
                                 </p>
-                                <span>({item.price_currency}$)</span>
+                                {/* <span>({item.attributes.prizeUsd}$)</span> */}
                             </>
                         : null
                     }
@@ -220,25 +225,25 @@ export const QuestionCard = () => {
                     </SharedDiv>
                     <CardContext>
                         <ImageCard>
-                            <img src={bgCard} alt={'bg_card'}/>
+                            <img src={item.attributes.img} alt={'bg_card'}/>
                         </ImageCard>
                         <ImageCardDesc>
                             <h3>What is shown in the picture?</h3>
                             <p>Attempt cost:
                                 <span>
-                                    {item.price_coin}
+                                    {Moralis.Units.FromWei(item.attributes.attempt_price)} {/* eth */}
                                     <img style={{width: "1.8rem", height: "3rem"}} src={ETH} alt="eth"/>
                                 </span>
                             </p>
                             <p>Attempt made:
                                 <span>
-                                    {item.attempts_made}
+                                    {item.attributes.attempt}
                                 </span>
                             </p>
                             { typeof window !== 'undefined'
                                 ? window.innerWidth <= 555 ?
                                     <p>Prize:
-                                        <span>{item.price_coin}</span>  ({item.price_currency}$)
+                                        {/* <span>{item.attributes.prize}</span> ({item.attributes.prizeUsd})$)  */}
                                     </p>
                                     :
                                     ''
@@ -247,26 +252,12 @@ export const QuestionCard = () => {
                         </ImageCardDesc>
                     </CardContext>
                     <div style={{display: 'flex', flexWrap: "wrap"}}>
-                                <div style={{margin: "1.6rem"}}>
-                                    <InputKeyWord/>
-                                    <InputKeyWord/>
-                                    <InputKeyWord/>
-                                    <InputKeyWord/>
-                                </div>
-                                <div style={{margin: "1.6rem"}}>
-                                    <InputKeyWord/>
-                                    <InputKeyWord/>
-                                </div>
-                                <div style={{margin: "1.6rem"}}>
-                                    <InputKeyWord/>
-                                    <InputKeyWord/>
-                                    <InputKeyWord/>
-                                    <InputKeyWord/>
-                                    <InputKeyWord/>
-                                </div>
+                        <WordBlocks wordbroken={item.attributes.wordbroken} />
                     </div>
                 </Card>
-            ))}
+          )
+        }
+        )}
         </>
     )
 }

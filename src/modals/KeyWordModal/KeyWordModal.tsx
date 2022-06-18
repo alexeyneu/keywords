@@ -32,25 +32,25 @@ export const KeyWordModal = () => {
             <img src={'../../images/bg_card.png'} alt={''}/>
             <KeyWordWrapper>
                 <div>
-                    <InputKeyWord value={'p'}/>
-                    <InputKeyWord value={'h'}/>
-                    <InputKeyWord value={'o'}/>
-                    <InputKeyWord value={'t'}/>
-                    <InputKeyWord value={'o'}/>
+                    <InputKeyWord margin={"0"} value={'p'}/>
+                    <InputKeyWord margin={"0"} value={'h'}/>
+                    <InputKeyWord margin={"0"} value={'o'}/>
+                    <InputKeyWord margin={"0"} value={'t'}/>
+                    <InputKeyWord margin={"0"} value={'o'}/>
                 </div>
                 <div>
-                    <InputKeyWord value={'w'}/>
-                    <InputKeyWord value={'i'}/>
-                    <InputKeyWord value={'t'}/>
-                    <InputKeyWord value={'h'}/>
+                    <InputKeyWord margin={"0"} value={'w'}/>
+                    <InputKeyWord margin={"0"} value={'i'}/>
+                    <InputKeyWord margin={"0"} value={'t'}/>
+                    <InputKeyWord margin={"0"} value={'h'}/>
                 </div>
                 <div>
-                    <InputKeyWord value={'f'}/>
-                    <InputKeyWord value={'a'}/>
-                    <InputKeyWord value={'m'}/>
-                    <InputKeyWord value={'i'}/>
-                    <InputKeyWord value={'l'}/>
-                    <InputKeyWord value={'y'}/>
+                    <InputKeyWord margin={"0"} value={'f'}/>
+                    <InputKeyWord margin={"0"} value={'a'}/>
+                    <InputKeyWord margin={"0"} value={'m'}/>
+                    <InputKeyWord margin={"0"} value={'i'}/>
+                    <InputKeyWord margin={"0"} value={'l'}/>
+                    <InputKeyWord margin={"0"} value={'y'}/>
                 </div>
                 <Guess>
                     Guess

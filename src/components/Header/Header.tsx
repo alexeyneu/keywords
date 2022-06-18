@@ -5,7 +5,11 @@ import {CircleIconButton} from "../UI/CircleIconButton/CircleIconButton";
 import BG_LIGHT from '../../images/light-bg.png';
 import GroupsCube from '../../images/group-cubes.png';
 import walletIcon from '../../images/wallet-icon.png';
-
+import {WalletModal } from 'web3uikit'
+import {useState, useEffect} from "react";
+import {useCheckBalance} from '../../hooks/withdrawal/checkBalance'
+import {useWithdrawPayments} from '../../hooks/withdrawal/withdrawPayments'
+import {useMoralis} from "react-moralis";
 
 export const Header = () => {
 
@@ -82,7 +86,32 @@ export const Header = () => {
       }
     `;
 
+    const [isModal, setIsModal] = useState(false);
+    const [isPayments, setIsPayments] = useState<boolean>(false)
+    const {isAuthenticated, isWeb3Enabled, authenticate} = useMoralis();
+    const setModal = () => {
+      setIsModal(!isModal)
+    }
+    const balance = useCheckBalance()
+    const payments = useWithdrawPayments()
+
+    useEffect(() => {
+      if(isPayments) {
+        payments()
+        setIsPayments(false)
+      }
+   }, [isPayments, payments])
+
     return(
+      <>
+        <WalletModal 
+          isOpened={isModal}
+          setIsOpened={setModal}
+          chainId={4}
+          moralisAuth
+          signingMessage=""
+        />
+
         <Header>
             <BgLightStatic src={BG_LIGHT} alt={'bg-light'}/>
             <img
@@ -94,19 +123,27 @@ export const Header = () => {
                 <DivFlex>
                     <TitleHeader>{TITLE_HEADER}</TitleHeader>
                     <DetailAccount>
-                        <p>0 <span>ETH</span></p>
+                        <p>{balance} <span>ETH</span></p>
                         <ActionButton>
                             Keyword create
                         </ActionButton>
-                        <WidthDrawlButton>
-                            Widthdrawl of money
+                        <WidthDrawlButton onClick={async () => {
+                          if(!isWeb3Enabled || !isAuthenticated) {
+                            await authenticate()
+                            setIsPayments(true)
+                          } else {
+                            setIsPayments(true)
+                          }
+                        }}>
+                          Widthdrawl of money
                         </WidthDrawlButton>
-                        <CircleIconButton>
+                        <CircleIconButton  onClick={setModal}>
                             <img src={walletIcon} alt={"wallet"}/>
                         </CircleIconButton>
                     </DetailAccount>
                 </DivFlex>
             </Container>
         </Header>
+      </>
     )
 }

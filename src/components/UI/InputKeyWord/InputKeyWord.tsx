@@ -2,10 +2,11 @@ import * as React from 'react';
 import styled from "styled-components";
 
 interface Props{
-    value? : string
+    value? : string,
+    margin : string;
 }
 
-const InputKey = styled.input`
+const InputKey = styled.input.attrs((props: {margin: string}) => props)`
   width: 4rem;
   height: 4rem;
   background: #dcdcdc;
@@ -16,11 +17,14 @@ const InputKey = styled.input`
   padding: 0 1.2rem;
   text-transform: uppercase;
   margin: 0 0.2rem;
+
+  margin-left:${props => props.margin};
 `
 
-export const InputKeyWord:React.FC<Props> = ({value}) => {
+export const InputKeyWord:React.FC<Props> = ({value, margin}) => {
     return(
         <InputKey
+            margin={margin}
             type="text"
             maxLength={1}
             value={value}
