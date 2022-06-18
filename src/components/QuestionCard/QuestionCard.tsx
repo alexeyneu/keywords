@@ -240,8 +240,8 @@ export const QuestionCard = ({question}: {question:any}) => {
                     }
                     </PriceCardDiv>
                     <ButtonsAction>
-                        <Guess onClick={() => {setisModal(index)}}>
-                            Guess
+                        <Guess onClick={() => {!item.attributes.guessed && setisModal(index)}}>
+                          Guess
                         </Guess>
                     </ButtonsAction>
                     <SharedDiv>
