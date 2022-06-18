@@ -9,7 +9,7 @@ export const useImageFee = () => {
    const {Moralis} = useMoralis()
    const { fetch } = useWeb3Transfer({
       type: "native",
-      amount: Moralis.Units.ETH(0.01),
+      amount: Moralis.Units.ETH(0.0001), // 0.01
       receiver: addressCreator,
    });
 
