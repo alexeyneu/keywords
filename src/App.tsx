@@ -3,10 +3,10 @@ import RouterServices from './services/RouterServices';
 import {AuthProvider} from './services/authProvider';
 import {useMoralis} from 'react-moralis'
 import { useEffect } from 'react';
-// import {useNotification} from 'web3uikit'
-// import {address} from './shared/variable'
-// import abi from './shared/lib/abi.json'
-// import {useState} from 'react'
+import {useNotification} from 'web3uikit'
+import {address} from './shared/variable'
+import abi from './shared/lib/abi.json'
+import {useState} from 'react'
 
 function App() {
   // const [contract, setContract] = useState<any>(false);

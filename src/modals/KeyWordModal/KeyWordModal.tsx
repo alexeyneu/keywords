@@ -40,8 +40,8 @@ interface props{
 export const KeyWordModal = ({id, img, wordbroken, attempt_price, prize}: props) => {
     const {chainId, isWeb3Enabled} = useMoralis()
     const [wordInput, setWordInput] = useState<string>('')
-    const guess = useGuess()
     const dispatchNotification = useNotification();
+    const guess = useGuess(id, prize, dispatchNotification)
 
     const onChange = (e:any, isWhitespace:boolean, countInp:number) => {
         
@@ -93,7 +93,7 @@ export const KeyWordModal = ({id, img, wordbroken, attempt_price, prize}: props)
             return
         }
 
-        await guess(String(id), Number(attempt_price), prize, wordInput, dispatchNotification)
+        await guess(String(id), Number(attempt_price), wordInput)
     }, [
         wordInput, 
         isWeb3Enabled, 
