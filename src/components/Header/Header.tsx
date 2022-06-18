@@ -10,6 +10,7 @@ import {useState, useEffect} from "react";
 import {useCheckBalance} from '../../hooks/withdrawal/checkBalance'
 import {useWithdrawPayments} from '../../hooks/withdrawal/withdrawPayments'
 import {useMoralis} from "react-moralis";
+import { Link } from "react-router-dom";
 
 export const Header = () => {
 
@@ -121,12 +122,14 @@ export const Header = () => {
             />
             <Container>
                 <DivFlex>
-                    <TitleHeader>{TITLE_HEADER}</TitleHeader>
+                    <Link to='/'>
+                      <TitleHeader>{TITLE_HEADER}</TitleHeader>
+                    </Link>
                     <DetailAccount>
                         <p>{balance} <span>ETH</span></p>
-                        <ActionButton>
-                            Keyword create
-                        </ActionButton>
+                        <Link to='/create-question-card'>
+                          <ActionButton>Keyword create</ActionButton>
+                        </Link>
                         <WidthDrawlButton onClick={async () => {
                           if(!isWeb3Enabled || !isAuthenticated) {
                             await authenticate()

@@ -4,7 +4,7 @@ import {Footer} from "../components/Footer/Footer";
 import {Container} from "../components/Container/Container";
 import styled from "styled-components";
 import {Input} from "../components/UI/Input/Input";
-import {ActionButton, Guess} from "../components/UI/Buttons/Buttons";
+import {ActionButton} from "../components/UI/Buttons/Buttons";
 import {LayoutQuestionCard} from "../components/LayoutQuestionCard/LayoutQuestonCard";
 // import {motion} from "framer-motion";
 import BG_LIGHT_GROUP from '../images/group-light-bg.png';

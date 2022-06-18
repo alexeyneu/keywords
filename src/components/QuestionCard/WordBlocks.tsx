@@ -3,9 +3,11 @@ import {useState, useEffect} from 'react'
 
 interface props {
    wordbroken:string;
+   disabled?:boolean;
+   onChange?:(e:any, isWhitespace:boolean, countInp:number) => void;
 }
 
-export const WordBlocks = ({wordbroken}: props) => {
+export const WordBlocks = ({wordbroken, disabled = true, onChange}: props) => {
    const [wordArray, setWordArr] = useState<string[]>([])
 
    useEffect(() => {
@@ -20,7 +22,7 @@ export const WordBlocks = ({wordbroken}: props) => {
             setWordArr((prevState: any[]) => {
                return [
                   ...prevState, 
-                  iWord === 0 && i !== 0 ? '' : wordbrokenArr[i + 1] // число
+                  iWord === 0 && i !== 0 ? '' : wordbrokenArr[i + 1] 
                ]
             })
          }
@@ -30,15 +32,16 @@ export const WordBlocks = ({wordbroken}: props) => {
    return (
       <>
          {wordArray.map((word:string, index:number) => {
-            if(word !== '') {
-               return(
-                  <InputKeyWord margin={"0"} key={index} />
-               );
-            } else {
-               return(
-                  <InputKeyWord margin={"2em"} key={index} />
-               );
-            }
+            return(
+               <InputKeyWord 
+                  disabled={disabled} 
+                  margin={word !== '' ? "0": "2em"} 
+                  key={index} 
+                  onChange={onChange}
+                  isWhitespace={word === ''}
+                  countInp={index}
+               />
+            );
          })}
       </>
    );

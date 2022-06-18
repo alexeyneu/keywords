@@ -3,9 +3,11 @@ import styled from "styled-components";
 import {Guess} from "../UI/Buttons/Buttons";
 import {ShareButton} from "../ShareButton/ShareButton";
 import ETH from '../../images/eth.png';
-import {useCallback} from 'react'
+import {useCallback, useEffect, useState} from 'react'
 import { WordBlocks } from "./WordBlocks";
 import {useMoralis} from "react-moralis";
+import { KeyWordModal } from "../../modals/KeyWordModal/KeyWordModal";
+import { ModalsBackground } from "../../modals/modals-background";
 
 const CardContext = styled.div`
   display: flex;
@@ -182,18 +184,40 @@ const ImageCardDesc = styled.div`
 
 export const QuestionCard = ({question}: {question:any}) => {
   const {Moralis} = useMoralis();
+  const [isModal, setisModal] = useState<false | number>(false);
+  const [ethPrice, setEthPrice] = useState<false | number>(false);
 
-  const prizePriceUsd = useCallback(async (ethPrize: number) => {
-    let priceEth = await fetch('https://api.binance.com/api/v3/avgPrice?symbol=ETHUSDT');
-    let priceEthJson = await priceEth.json() 
-    
-    console.log(Number(priceEthJson.price) * ethPrize)
-    return Number(priceEthJson.price) * ethPrize
+  useEffect(() => {
+    const ethPriceUsd = async () => {
+      let priceEth:any = await fetch('https://api.binance.com/api/v3/avgPrice?symbol=ETHUSDT')
+      priceEth = await priceEth.json()
+
+      setEthPrice(Number(priceEth.price)) 
+    }
+
+    ethPriceUsd()
   }, [])
+
+  const onModal = () =>{
+    setisModal(false)
+  }
 
     return(
         <>
-        {question.map((item:any) => {
+        {typeof isModal === 'number' && 
+          <ModalsBackground onClick={onModal}>
+            <KeyWordModal 
+              id={question[isModal].attributes.ID}
+              img={question[isModal].attributes.img}
+              wordbroken={question[isModal].attributes.wordbroken}
+              attempt_price={question[isModal].attributes.attempt_price}
+              prize={question[isModal].attributes.prize}
+            />
+          </ModalsBackground>
+        }
+
+        {ethPrice && question.map((item:any, index:number) => {
+          let prizeUsd = Number(item.attributes.prize * ethPrice).toFixed(3)
           return(
             <Card key={item.id}>
                     <IdCardDiv className="id-card">
@@ -210,13 +234,13 @@ export const QuestionCard = ({question}: {question:any}) => {
                                         <img style={{width: "2.4rem", height: "4rem"}} src={ETH} alt="eth"/>
                             </span>
                                 </p>
-                                {/* <span>({item.attributes.prizeUsd}$)</span> */}
+                                <span>({prizeUsd}$)</span>
                             </>
                         : null
                     }
                     </PriceCardDiv>
                     <ButtonsAction>
-                        <Guess>
+                        <Guess onClick={() => {setisModal(index)}}>
                             Guess
                         </Guess>
                     </ButtonsAction>
@@ -243,7 +267,7 @@ export const QuestionCard = ({question}: {question:any}) => {
                             { typeof window !== 'undefined'
                                 ? window.innerWidth <= 555 ?
                                     <p>Prize:
-                                        {/* <span>{item.attributes.prize}</span> ({item.attributes.prizeUsd})$)  */}
+                                        <span>{item.attributes.prize}</span> ({prizeUsd})$
                                     </p>
                                     :
                                     ''

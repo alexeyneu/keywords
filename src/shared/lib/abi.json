@@ -132,15 +132,9 @@
         "internalType": "bool",
         "name": "result",
         "type": "bool"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
       }
     ],
-    "name": "guessResult",
+    "name": "isGuessed",
     "type": "event"
   },
   {
@@ -213,7 +207,13 @@
       }
     ],
     "name": "guess",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "payable",
     "type": "function"
   },

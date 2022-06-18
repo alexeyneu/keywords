@@ -9,20 +9,20 @@ import { useAppDispatch } from "../store/hooks"
 import { setSuccess } from "../store/sliced/success/success.slice"
 import { setError } from "../store/sliced/error/error.sliced"
 import confetti  from 'canvas-confetti';
+import { PayloadType } from 'web3uikit/dist/components/Notification/types';
 
 export const  useGuess = () => {
    const dispatch = useAppDispatch();
    const { fetch } = useWeb3ExecuteFunction()
    const { Moralis} = useMoralis()
 
-   const guess = async (tokenId:string, msgValue:number, prize:number, word:string, setStatus: React.Dispatch<React.SetStateAction<string>> ) => {
-
+   const guess = async (tokenId:string, msgValue:number, prize:number, word:string, dispatchNotification: (props: PayloadType) => void ) => {
       const options = {
          contractAddress: address,
          functionName: "guess",
          abi: abi,
          params: {
-            tokenId:String(Number(tokenId) - 1),
+            tokenId:String(Number(tokenId) - 1), //Number(tokenId) - 1
             word:word
          },
          msgValue: msgValue,
@@ -32,12 +32,12 @@ export const  useGuess = () => {
          params: options,
          onSuccess: (tx:any) => tx.wait().then((newTx:any) => {
             async function isGuessed() {
-               console.log(tokenId)
-               const Guessed = Moralis.Object.extend("guessed");
+               console.log(newTx)
+               const Guessed = Moralis.Object.extend("isGuessed");
                const query = new Moralis.Query(Guessed);
                const obj = await query
-               .equalTo("tokenId", String(Number(tokenId) - 1))
-               .find()
+               .equalTo("tokenId", String(Number(tokenId) - 1)) 
+               .find()//Number(tokenId) - 1) 
 
                console.log(obj)
                let result = await obj[obj.length - 1].attributes.result;
@@ -81,11 +81,18 @@ export const  useGuess = () => {
                   
                   
                   dispatch(setSuccess(`You won: ${prize} ETH!`));
-                  
+                  dispatchNotification({
+                     type: 'success',
+                     message: `You won: ${prize} ETH!`,
+                     title: 'Success',
+                     icon: "info",
+                     position:'topR',
+                  });
+
                   const Question = Moralis.Object.extend("questions");
                   const query = new Moralis.Query(Question);
                   const question = await query
-                  .equalTo("ID", String(tokenId))
+                  .equalTo("ID", String(tokenId)) // tokenId
                   .find()
 
                   if(typeof question[0].set === 'function') {
@@ -95,9 +102,14 @@ export const  useGuess = () => {
                   }
                } else {
                   dispatch(setError("You didn't guess"))
+                  dispatchNotification({
+                     type: 'error',
+                     message: "You didn't guess",
+                     title: 'Error',
+                     icon: "info",
+                     position:'topR',
+                  });
                }
-
-               setStatus("")
             }
 
             isGuessed()
@@ -105,6 +117,13 @@ export const  useGuess = () => {
          onError: (error:any) => {
             console.log(error.message);
             dispatch(setError("Try again"))
+            dispatchNotification({
+               type: 'info',
+               message: "Try again",
+               title: 'Info',
+               icon: "info",
+               position:'topR',
+           });
          },
       })
 
@@ -112,7 +131,7 @@ export const  useGuess = () => {
          const Question = Moralis.Object.extend("questions");
          const query = new Moralis.Query(Question);
          const obj = await query
-         .equalTo("ID", tokenId)
+         .equalTo("ID", String(tokenId)) //tokenId
          .find()
       
          obj[0].increment("attempt");
