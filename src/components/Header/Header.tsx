@@ -5,7 +5,15 @@ import {CircleIconButton} from "../UI/CircleIconButton/CircleIconButton";
 import BG_LIGHT from '../../images/light-bg.png';
 import GroupsCube from '../../images/group-cubes.png';
 import walletIcon from '../../images/wallet-icon.png';
-
+import {WalletModal } from 'web3uikit'
+import {useState, useEffect} from "react";
+import {useCheckBalance} from '../../hooks/withdrawal/checkBalance'
+import {useWithdrawPayments} from '../../hooks/withdrawal/withdrawPayments'
+import {useMoralis} from "react-moralis";
+import { Link } from "react-router-dom";
+import {ModalsBackground} from '../../modals/modals-background'
+import { WalletMessageModal } from "../../modals/WalletMessageModal/WalletMessageModal";
+import { ChangeNetWork } from "../../modals/ChangeNetWork/ChangeNetWork";
 
 export const Header = () => {
 
@@ -82,7 +90,50 @@ export const Header = () => {
       }
     `;
 
+    const [isModal, setIsModal] = useState(false);
+    const [isPayments, setIsPayments] = useState<boolean>(false)
+    const {isAuthenticated, isWeb3Enabled, authenticate, logout, account, chainId} = useMoralis();
+    const [status, setStatus] = useState<string | number>('')
+
+    const setModal = () => {
+      if(isWeb3Enabled) {
+        logout()
+        return;
+      }
+      setIsModal(!isModal)
+    }
+    const balance = useCheckBalance()
+    const payments = useWithdrawPayments()
+
+    useEffect(() => {
+      if(isPayments) {
+        payments()
+        setIsPayments(false)
+      }
+   }, [isPayments, payments])
+
     return(
+      <>
+        <WalletModal
+          isOpened={isModal}
+          setIsOpened={setModal}
+          chainId={4}
+          moralisAuth
+          signingMessage=""
+        />
+        {/* rinkeby */}
+        {status === 'change network' &&
+          <ModalsBackground onClick={() => setStatus('')}>
+            <ChangeNetWork setStatus={setStatus} />
+          </ModalsBackground>
+        }
+
+        {status === 'connect wallet' &&
+          <ModalsBackground onClick={() => setStatus(' ')}>
+              <WalletMessageModal setStatus={setStatus} />
+          </ModalsBackground>
+        }
+
         <Header>
             <BgLightStatic src={BG_LIGHT} alt={'bg-light'}/>
             <img
@@ -92,21 +143,56 @@ export const Header = () => {
             />
             <Container>
                 <DivFlex>
-                    <TitleHeader>{TITLE_HEADER}</TitleHeader>
+                    <Link to='/'>
+                      <TitleHeader>{TITLE_HEADER}</TitleHeader>
+                    </Link>
                     <DetailAccount>
-                        <p>0 <span>ETH</span></p>
-                        <ActionButton>
-                            Keyword create
-                        </ActionButton>
-                        <WidthDrawlButton>
-                            Widthdrawl of money
+                        <p>{balance} <span>ETH</span></p>
+
+                        {isWeb3Enabled && chainId === '0x4' ?
+                              <Link to='/create-question-card'>
+                                <ActionButton>Keyword create</ActionButton>
+                              </Link>
+                              :
+                              <ActionButton onClick={() => {
+                                if(!isWeb3Enabled) {
+                                  setStatus('connect wallet')
+                                  return
+                                }else window.open("/create-question-card");
+                              }}>
+
+                                  Create keyword</ActionButton>
+                        }
+
+                        <WidthDrawlButton onClick={async () => {
+                          if(!isWeb3Enabled) {
+                            setStatus('connect wallet')
+                            return
+                          }
+
+                          if(chainId !== '0x4') { // rinkeby
+                            setStatus('change network')
+                            return;
+                          }
+
+                          if(!isWeb3Enabled || !isAuthenticated) {
+                            await authenticate()
+                          }
+                          setIsPayments(true)
+                        }}>
+                          Widthdrawl of money
                         </WidthDrawlButton>
-                        <CircleIconButton>
-                            <img src={walletIcon} alt={"wallet"}/>
+                        <CircleIconButton onClick={setModal}>
+                            {account ?
+                              account.toString().replace(/.+/, (e: any) => e.slice(0,6)+'...'+e.slice(-6))
+                              :
+                              <img src={walletIcon} alt={"wallet"}/>
+                            }
                         </CircleIconButton>
                     </DetailAccount>
                 </DivFlex>
             </Container>
         </Header>
+      </>
     )
 }

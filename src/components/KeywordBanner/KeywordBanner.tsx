@@ -96,6 +96,10 @@ const HeaderText = styled.div`
 export const KeywordBanner = () => {
 
     const [isActiveVideo, setIsActiveVideo] = useState(false);
+    
+    const onModal = () => {
+      setIsActiveVideo(false)
+    }
 
     return(
         <section style={{padding:"50px 0"}}>
@@ -113,12 +117,12 @@ export const KeywordBanner = () => {
                     </div>
                 </DivFlex>
             </Container>
-            { isActiveVideo ?
-                <ModalsBackground>
+            { isActiveVideo &&
+                <ModalsBackground onClick={onModal}>
                     <br/>
                     <VideoModal/>
                 </ModalsBackground>
-                : '' }
+            }
         </section>
     );
 }

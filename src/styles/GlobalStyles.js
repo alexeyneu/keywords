@@ -38,6 +38,7 @@ const GlobalStyled = createGlobalStyle`
     scrollbar-width: thin;
     scrollbar-color: #612C8F #EEEEEF;
     background-color: #ECECEC;
+    overflow-x: hidden;
     &::selection {
       background: var(--darkpurple);
       color: white;
@@ -96,7 +97,6 @@ const GlobalStyled = createGlobalStyle`
 
   main {
     flex-grow: 2;
-    overflow-x: hidden;
     max-width: 192rem;
     margin: auto;
   }

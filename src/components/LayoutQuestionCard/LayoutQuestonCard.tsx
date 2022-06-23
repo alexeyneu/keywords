@@ -1,14 +1,10 @@
-import * as React from 'react';
 import styled from "styled-components";
-import {InputKeyWord} from "../UI/InputKeyWord/InputKeyWord";
 import {Guess} from "../UI/Buttons/Buttons";
 import {ShareButton} from "../ShareButton/ShareButton";
 import ETH from "../../images/eth.png";
 import bgCard from '../../images/bg_card.png';
-
-const dataQuestionCard = [
-    {id: '1', img: '../../images/bg_card.png', price_coin: '0,01', price_currency: '200', attempts_made: '10'},
-]
+import { WordBlocks } from '../QuestionCard/WordBlocks';
+import {useEffect, useState} from 'react'
 
 const CardContext = styled.div`
   display: flex;
@@ -184,11 +180,44 @@ const ImageCardDesc = styled.div`
   }
 `
 
-export const LayoutQuestionCard = () => {
+interface props{
+  id: string;
+  img:string;
+  price_coin:string;
+  attempts_made:string;
+  word:string;
+}
+
+export const LayoutQuestionCard = (props:props) => {
+    let itemsWord = [{...props}]
+    const [ethPrice, setEthPrice] = useState<number>(0);
+
+    const Wordbroken = (word:string) => {
+      const wordsArr = word.split(' ')
+      const wordsNumber = wordsArr.length
+      let Wordbroken = `${wordsNumber}:`;
+      
+      for(let i in wordsArr) {
+         Wordbroken = Wordbroken + wordsArr[i].length + ','
+      }
+
+      return Wordbroken.slice(0, -1)
+    }
+
+    useEffect(() => {
+      const ethPriceUsd = async () => {
+        let priceEth:any = await fetch('https://api.binance.com/api/v3/avgPrice?symbol=ETHUSDT')
+        priceEth = await priceEth.json()
+  
+        setEthPrice(Number(priceEth.price)) 
+      }
+  
+      ethPriceUsd()
+    }, [])
 
     return(
         <>
-            {dataQuestionCard.map(item => (
+            {itemsWord.map((item:any) => (
                 <Card>
                     <IdCardDiv className="id-card">
                         {item.id}
@@ -204,13 +233,13 @@ export const LayoutQuestionCard = () => {
                                             <img style={{width: "2.4rem", height: "4rem"}} src={ETH} alt="eth"/>
                             </span>
                                     </p>
-                                    <span>({item.price_currency}$)</span>
+                                    <span>({Number(item.price_coin * ethPrice).toFixed(3)}$)</span>
                                 </>
                             : null
                         }
                     </PriceCardDiv>
                     <ButtonsAction>
-                        <Guess>
+                        <Guess type="button"> 
                             Guess
                         </Guess>
                     </ButtonsAction>
@@ -219,7 +248,7 @@ export const LayoutQuestionCard = () => {
                     </SharedDiv>
                     <CardContext>
                         <ImageCard>
-                            <img src={bgCard} alt={'bg_card'}/>
+                            <img src={item.img} alt={'bg_card'}/>
                         </ImageCard>
                         <ImageCardDesc>
                             <h3>What is shown in the picture?</h3>
@@ -246,23 +275,7 @@ export const LayoutQuestionCard = () => {
                         </ImageCardDesc>
                     </CardContext>
                     <div style={{display: 'flex', flexWrap: "wrap"}}>
-                        <div style={{margin: "1.6rem"}}>
-                            <InputKeyWord/>
-                            <InputKeyWord/>
-                            <InputKeyWord/>
-                            <InputKeyWord/>
-                        </div>
-                        <div style={{margin: "1.6rem"}}>
-                            <InputKeyWord/>
-                            <InputKeyWord/>
-                        </div>
-                        <div style={{margin: "1.6rem"}}>
-                            <InputKeyWord/>
-                            <InputKeyWord/>
-                            <InputKeyWord/>
-                            <InputKeyWord/>
-                            <InputKeyWord/>
-                        </div>
+                      <WordBlocks wordbroken={Wordbroken(item.word)} />
                     </div>
                 </Card>
             ))}

@@ -1,8 +1,7 @@
-import * as React from 'react';
 import styled from "styled-components";
 import metamask from '../../images/metamask.png';
 import walletConnect from '../../images/walletconnect.png';
-
+import {useMoralis} from 'react-moralis'
 
 const CreateWordMessage = styled.div`
     max-width: 56.7rem;
@@ -41,7 +40,8 @@ const WayConnectWallet = styled.div`
   }
 `
 
-export const WalletMessageModal = () => {
+export const WalletMessageModal = ({setStatus}: {setStatus: (value: React.SetStateAction<string | number>) => void}) => {
+  const {Moralis, authenticate} = useMoralis(); 
     return(
         <CreateWordMessage>
             <svg width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -49,11 +49,17 @@ export const WalletMessageModal = () => {
             </svg>
             <h3>Please connect your wallet</h3>
             <WayConnectWallet>
-                <div>
+                <div onClick={async () => {
+                  await authenticate()
+                  setStatus(' ')
+                }}>
                     <img src={metamask} alt={'metamask'}/>
                     <p>Metamask</p>
                 </div>
-                <div>
+                <div onClick={async () => {
+                  await Moralis.authenticate({provider: "walletconnect", chainId:4})
+                  setStatus(' ')
+                }}>
                     <img src={walletConnect} alt={'walletconnect'}/>
                     <p>WalletConnect</p>
                 </div>

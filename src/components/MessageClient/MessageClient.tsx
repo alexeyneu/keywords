@@ -8,6 +8,7 @@ interface Props{
 const ErrorMessage = styled.p`
     color: rgba(230, 53, 53, 1);
     font-size: 14px;
+    margin: 30px 0;
 `
 const SuccessMessage = styled.p`
   color: rgb(53, 230, 68);
