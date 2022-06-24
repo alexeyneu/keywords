@@ -7,7 +7,7 @@ interface Props{
 }
 
 const ModalBackground = styled.div`
-  background: rgba(10, 10, 10, 0.86);
+  background: rgb(33, 33, 33);
   position: fixed;
   inset: 0;
   width: 100%;

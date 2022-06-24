@@ -182,13 +182,13 @@ export const Header = () => {
                         }}>
                           Widthdrawl of money
                         </WidthDrawlButton>
-                        <CircleIconButton onClick={setModal}>
+                        <WidthDrawlButton onClick={setModal}>
                             {account ?
                               account.toString().replace(/.+/, (e: any) => e.slice(0,6)+'...'+e.slice(-6))
                               :
-                              <img src={walletIcon} alt={"wallet"}/>
+                              'Authenticate'
                             }
-                        </CircleIconButton>
+                        </WidthDrawlButton>
                     </DetailAccount>
                 </DivFlex>
             </Container>

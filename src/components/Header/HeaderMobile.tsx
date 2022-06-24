@@ -77,7 +77,7 @@ export const HeaderMobile:React.FC<Props> = (style) => {
         position: absolute;
         height: 6rem;
         left: 10%;
-        bottom: 0;
+        bottom: 10%;
         color: #fff !important;
         font-size: 2.4rem !important;
     `
@@ -188,7 +188,7 @@ export const HeaderMobile:React.FC<Props> = (style) => {
                             <p>Balance: {balance} ETH</p>
                             <div>
                             {isWeb3Enabled ?
-                              
+
                                   <p><Link to='/create-question-card'><button>Create keyword</button></Link></p>
                               :
                               <button onClick={() => {
