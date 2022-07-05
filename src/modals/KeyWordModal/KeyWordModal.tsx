@@ -107,8 +107,8 @@ export const KeyWordModal = ({id, img, wordbroken, attempt_price, prize}: props)
             return;
         }
 
-        // setStatus('wainting')
-        // await guess(String(id), Number(attempt_price), wordInput)
+        setStatus('wainting')
+        await guess(String(id), Number(attempt_price), wordInput)
     }, [
         wordInput,
         isWeb3Enabled,

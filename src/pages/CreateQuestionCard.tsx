@@ -193,7 +193,7 @@ const CreateQuestionCard:React.FC<props> = () => {
                 position:'topR',
             });
 
-           await fetch(`https://api.mintface.io/image?q=`) // ${urlImg}${fetchStr}
+            await fetch(`${urlImg}${fetchStr}`) // ${urlImg}${fetchStr}
               .then( response =>  response.blob())
               .then( async (blob) => {
                  let file = new File([blob], "name.png");

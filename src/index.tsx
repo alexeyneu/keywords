@@ -13,8 +13,8 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <MoralisProvider
-    serverUrl="https://delcpondbwcr.usemoralis.com:2053/server"
-    appId="T8Wt7bEUXXLryy3ZVqo5CbRwNYb8NcT0Blk2Yt7y"
+       serverUrl="https://zudw76gwxkos.usemoralis.com:2053/server"
+       appId="MkHcQ642RUsmJ8H29mH0hA1CM4nnPVmR75JyjQAY"
   >
     <Provider store={store}>
       <NotificationProvider>
